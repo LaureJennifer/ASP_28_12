@@ -1,16 +1,12 @@
 ﻿using ASP_28_12.Domains.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace ASP_28_12.Infrastructure.Configurations
+namespace ASP_28_12.Domains.Configurations
 {
     public class OrderDetailsConfiguration : IEntityTypeConfiguration<OrderDetails>
     {
-        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<OrderDetails> builder)
+        public void Configure(EntityTypeBuilder<OrderDetails> builder)
         {
             builder.ToTable("OrderDetails"); // Đặt tên cho bảng là "OrderDetails"
 
