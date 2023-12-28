@@ -1,10 +1,6 @@
-﻿using ASP_28_12.Domains.Entities;
+﻿using ASP_28_12.Domains.Configurations;
+using ASP_28_12.Domains.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ASP_28_12.Domains.EF
 {
@@ -12,7 +8,14 @@ namespace ASP_28_12.Domains.EF
     {
         public FlowerDbContext(DbContextOptions options) : base(options)
         {
-            
+
+        }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfiguration(new CustomerConfiguration());
+            modelBuilder.ApplyConfiguration(new ProductConfiguration());
+            modelBuilder.ApplyConfiguration(new OrderConfiguration());
+            modelBuilder.ApplyConfiguration(new OrderDetailsConfiguration());
         }
         public DbSet<Customer> Customers { get; set; }
 

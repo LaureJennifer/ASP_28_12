@@ -1,13 +1,8 @@
 ﻿using ASP_28_12.Domains.Entities;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace ASP_28_12.Infrastructure.Configurations
+namespace ASP_28_12.Domains.Configurations
 {
     public class OrderConfiguration : IEntityTypeConfiguration<Order>
     {
@@ -20,7 +15,7 @@ namespace ASP_28_12.Infrastructure.Configurations
 
             builder.Property(o => o.CustomerID).IsRequired(); // Yêu cầu trường CustomerID không được null
 
-            builder.Property(o => o.OrderDate).IsRequired(); // Yêu cầu trường OrderDate không được null
+            builder.Property(o => o.OrderDate).HasDefaultValue(DateTimeOffset.UtcNow).IsRequired(); // Yêu cầu trường OrderDate không được null
 
             builder.Property(o => o.Status).IsRequired(); // Yêu cầu trường Status không được null
 
