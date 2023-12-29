@@ -25,8 +25,12 @@ namespace ASP_28_12.Domains.Extensions
                 new Product() { ID = Guid.NewGuid(), Name = "Flower 1", Price = 500 },
                 new Product() { ID = Guid.NewGuid(), Name = "Flower 2", Price = 600 },
                 new Product() { ID = Guid.NewGuid(), Name = "Flower 3", Price = 450 },
-                new Product() { ID = Guid.NewGuid(), Name = "Flower 4", Price = 420 });
-           
+                new Product() { ID = Guid.NewGuid(), Name = "Flower 4", Price = 420 }
+                );
+            modelBuilder.Entity<User>().HasData(
+                new User() { Id = Guid.NewGuid(), UserName = "User 1", Address = "Tuyên Quang", PhoneNumber = "0349485127" },
+                new User() { Id = Guid.NewGuid(), UserName = "User 2", Address = "Tuyên Quang", PhoneNumber = "0349485127" }
+                );
         }
        
     }
