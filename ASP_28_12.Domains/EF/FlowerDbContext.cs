@@ -1,5 +1,6 @@
 ﻿using ASP_28_12.Domains.Configurations;
 using ASP_28_12.Domains.Entities;
+using ASP_28_12.Domains.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace ASP_28_12.Domains.EF
@@ -16,6 +17,8 @@ namespace ASP_28_12.Domains.EF
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
             modelBuilder.ApplyConfiguration(new OrderConfiguration());
             modelBuilder.ApplyConfiguration(new OrderDetailsConfiguration());
+
+            modelBuilder.Seed();
         }
         public DbSet<Customer> Customers { get; set; }
 
