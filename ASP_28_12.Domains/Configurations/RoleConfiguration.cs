@@ -1,11 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using ASP_28_12.Domains.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ASP_28_12.Domains.Entities;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ASP_28_12.Domains.Configurations
 {

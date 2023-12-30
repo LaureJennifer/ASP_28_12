@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ASP_28_12.Domains.EF
 {
-    public class FlowerDbContext : IdentityDbContext<User,Role,Guid>
+    public class FlowerDbContext : IdentityDbContext<User, Role, Guid>
     {
         public FlowerDbContext(DbContextOptions options) : base(options)
         {
