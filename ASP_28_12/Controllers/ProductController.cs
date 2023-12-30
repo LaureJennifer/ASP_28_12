@@ -11,51 +11,38 @@ namespace ASP_28_12.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private readonly IProductRepository _productService;
+        private readonly IProductRepository _productRepository;
 
-        public ProductController(IProductRepository productService)
+        public ProductController(IProductRepository productRepository)
         {
-            _productService = productService;
+            _productRepository = productRepository;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllPaging([FromQuery] ProductPagingRequest product)
+        public async Task<IActionResult> GetAllPaging([FromQuery] ProductPagingRequest request)
         {
-            var pageList = await _productService.GetAllPaging(product);
+            var pageList = await _productRepository.GetAllPaging(request);
 
-            var ProductDtosByName = pageList.Items.Select(x => new Product()
+            var productDtosByName = pageList.Items.Select(x => new Product()
             {
                 ID = x.ID,
                 Name = x.Name,
                 Price = x.Price,
                 CreatedDate = DateTime.Now
             });
-            return Ok(new PagedList<Product>(ProductDtosByName.ToList(),
+            return Ok(new PagedList<Product>(productDtosByName.ToList(),
                 pageList.MetaData.TotalCount,
                 pageList.MetaData.CurrentPage,
                 pageList.MetaData.PageSize));
         }
-        //public async Task<IActionResult> GetAll()
-        //{
-        //    var tasks = await _taskRepository.GetTasks();
-        //    var taskDtos = tasks.Select(x => new TaskDto()
-        //    {
-        //        Status = x.Status,
-        //        Priority = x.Priority,
-        //        Name = x.Name,
-        //        CreatedDate = x.CreatedDate,
-        //        AssigneeId = x.AssigneeId,
-        //        Id = x.Id,
-        //    });
-        //    return Ok(taskDtos);
-        //}
+        
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] ProductCreateRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var task = await _productService.Create(new Product()
+            var product = await _productRepository.Create(new Product()
             {
                 ID = request.ID,
                 CreatedDate = DateTime.Now,
@@ -74,7 +61,7 @@ namespace ASP_28_12.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var productUpdate = await _productService.GetById(id);
+            var productUpdate = await _productRepository.GetById(id);
             if (productUpdate == null)
             {
                 return NotFound($"{id} is not found");
@@ -83,7 +70,7 @@ namespace ASP_28_12.Controllers
             productUpdate.Price = request.Price;
             productUpdate.CreatedDate = DateTime.Now;
 
-            var result = await _productService.Update(productUpdate);
+            var result = await _productRepository.Update(productUpdate);
             return Ok(new Product()
             {
                 Name = result.Name,
@@ -96,7 +83,7 @@ namespace ASP_28_12.Controllers
         [Route("{id}")]
         public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
-            var result = await _productService.GetById(id);
+            var result = await _productRepository.GetById(id);
             if (result == null)
             {
                 return NotFound($"{id} is not found");
@@ -113,10 +100,10 @@ namespace ASP_28_12.Controllers
         [Route("{id}")]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
-            var product = await _productService.GetById(id);
+            var product = await _productRepository.GetById(id);
             if (product == null) return NotFound($"{id} is not found");
 
-            await _productService.Delete(product);
+            await _productRepository.Delete(product);
             return Ok(new Product()
             {
                 Name = product.Name,

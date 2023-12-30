@@ -22,6 +22,7 @@ namespace ASP_28_12
                 options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionString"));
             });
             builder.Services.AddTransient<IProductRepository, ProductRepository>();
+            builder.Services.AddTransient<IUserRepository, UserRepository>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

@@ -15,6 +15,7 @@ namespace ASP_28_12.Domains.Configurations
 
             builder.Property(p => p.Name).IsRequired(); // Yêu cầu trường Name không được null
             builder.Property(p => p.CreatedDate).HasDefaultValue(DateTimeOffset.UtcNow);
+            builder.Property(p => p.UrlImage).IsRequired();
 
             builder.Property(p => p.Price).IsRequired(); // Yêu cầu trường Price không được null
         }
