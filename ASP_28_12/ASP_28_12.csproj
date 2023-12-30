@@ -21,4 +21,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ASP_28_12.Data\ASP_28_12.Application.csproj" />
+    <ProjectReference Include="..\ASP_28_12.Domains\ASP_28_12.Domains.csproj" />
+  </ItemGroup>
+
 </Project>

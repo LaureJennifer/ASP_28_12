@@ -20,4 +20,14 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Catalog\OrderDetailsApp\" />
+    <Folder Include="Catalog\Role\" />
+    <Folder Include="Catalog\OrderApp\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ASP_28_12.Domains\ASP_28_12.Domains.csproj" />
+  </ItemGroup>
+
 </Project>

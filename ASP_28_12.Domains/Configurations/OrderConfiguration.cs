@@ -17,10 +17,10 @@ namespace ASP_28_12.Domains.Configurations
 
             builder.Property(o => o.UserID).IsRequired();
 
-            builder.Property(o => o.OrderDate).HasDefaultValue(DateTimeOffset.UtcNow).IsRequired(); // Yêu cầu trường OrderDate không được null
+            builder.Property(o => o.OrderDate).HasDefaultValue(DateTimeOffset.UtcNow).IsRequired();
 
             builder.Property(o => o.Status).IsRequired(); // Yêu cầu trường Status không được null
-
+            builder.Property(o => o.TotalFee).IsRequired();
             builder.HasOne(e => e.Customer)
                 .WithMany(c => c.Orders)
                 .HasForeignKey(e => e.CustomerID)
