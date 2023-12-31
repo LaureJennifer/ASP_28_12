@@ -11,6 +11,6 @@ namespace ASP_28_12.Repositories
         public Task<Order> Update(Order order);
         public Task<Order> Delete(Order order);
         public Task<Order> GetById(Guid id);
-        public Task<PagedList<Order>> GetAllPaging(OrderDetailsPagingRequest orderPagingRequest);
+        public Task<PagedList<Order>> GetAllPaging(OrderPagingRequest orderPagingRequest);
     }
 }

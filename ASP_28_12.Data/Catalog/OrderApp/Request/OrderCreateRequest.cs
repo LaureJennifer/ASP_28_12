@@ -2,7 +2,7 @@
 
 namespace ASP_28_12.Application.Catalog.OrderApp.Request
 {
-    public class OrderDetailsCreateRequest
+    public class OrderCreateRequest
     {
         public Guid ID { get; set; }
         public Guid UserID { get; set; }

@@ -1,5 +1,5 @@
-﻿using ASP_28_12.Application.Catalog.OrderApp.Request;
-using ASP_28_12.Application.Catalog.OrderDetailsApp.Request;
+﻿
+using ASP_28_12.Application.Catalog.OrderApp.Request;
 using ASP_28_12.Application.ViewModels.Pagination;
 using ASP_28_12.Domains.Entities;
 using ASP_28_12.Repositories;
@@ -18,7 +18,7 @@ namespace ASP_28_12.Controllers
             _orderRepository = orderRepository;
         }
         [HttpGet]
-        public async Task<IActionResult> GetAllPaging([FromQuery] OrderDetailsPagingRequest request)
+        public async Task<IActionResult> GetAllPaging([FromQuery] OrderPagingRequest request)
         {
             var pageList = await _orderRepository.GetAllPaging(request);
 
@@ -37,7 +37,7 @@ namespace ASP_28_12.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] OrderDetailsCreateRequest request)
+        public async Task<IActionResult> Create([FromBody] OrderCreateRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -56,7 +56,7 @@ namespace ASP_28_12.Controllers
         [HttpPut]
         [Route("{id}")]
 
-        public async Task<IActionResult> Update(Guid id, [FromBody] OrderDetailsUpdateRequest request)
+        public async Task<IActionResult> Update(Guid id, [FromBody] OrderUpdateRequest request)
         {
             if (!ModelState.IsValid)
             {

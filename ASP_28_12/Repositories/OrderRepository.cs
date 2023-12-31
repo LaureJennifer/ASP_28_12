@@ -30,7 +30,7 @@ namespace ASP_28_12.Repositories
             return order;
         }
 
-        public async Task<PagedList<Order>> GetAllPaging(OrderDetailsPagingRequest orderPagingRequest)
+        public async Task<PagedList<Order>> GetAllPaging(OrderPagingRequest orderPagingRequest)
         {
             var query = _db.Orders.Include(x => x.OrderDetails).AsQueryable();
 
