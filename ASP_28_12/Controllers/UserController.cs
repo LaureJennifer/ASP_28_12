@@ -1,11 +1,8 @@
-﻿using ASP_28_12.Application.Catalog.ProductApp.Request;
-using ASP_28_12.Application.Catalog.UserApp.Request;
+﻿using ASP_28_12.Application.Catalog.UserApp.Request;
 using ASP_28_12.Application.ViewModels.Pagination;
 using ASP_28_12.Domains.Entities;
 using ASP_28_12.Repositories;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 
 namespace ASP_28_12.Controllers
 {
@@ -39,7 +36,7 @@ namespace ASP_28_12.Controllers
                 pageList.MetaData.CurrentPage,
                 pageList.MetaData.PageSize));
         }
-    
+
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] UserCreateRequest request)
         {

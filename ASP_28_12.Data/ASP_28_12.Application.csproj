@@ -21,9 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Catalog\OrderDetailsApp\" />
     <Folder Include="Catalog\Role\" />
-    <Folder Include="Catalog\OrderApp\" />
   </ItemGroup>
 
   <ItemGroup>

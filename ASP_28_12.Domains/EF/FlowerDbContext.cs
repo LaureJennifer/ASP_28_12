@@ -15,7 +15,6 @@ namespace ASP_28_12.Domains.EF
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new CustomerConfiguration());
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
             modelBuilder.ApplyConfiguration(new OrderConfiguration());
             modelBuilder.ApplyConfiguration(new OrderDetailsConfiguration());
@@ -32,7 +31,6 @@ namespace ASP_28_12.Domains.EF
 
             modelBuilder.Seed();
         }
-        public DbSet<Customer> Customers { get; set; }
 
         public DbSet<Order> Orders { get; set; }
 

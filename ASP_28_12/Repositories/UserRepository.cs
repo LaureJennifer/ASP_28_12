@@ -1,5 +1,4 @@
-﻿using ASP_28_12.Application.Catalog.ProductApp.Request;
-using ASP_28_12.Application.Catalog.UserApp.Request;
+﻿using ASP_28_12.Application.Catalog.UserApp.Request;
 using ASP_28_12.Application.ViewModels.Pagination;
 using ASP_28_12.Domains.EF;
 using ASP_28_12.Domains.Entities;
@@ -18,7 +17,7 @@ namespace ASP_28_12.Repositories
 
         public async Task<User> Create(User user)
         {
-            _db.Users.Add(user);
+            await _db.Users.AddAsync(user);
             await _db.SaveChangesAsync();
             return user;
         }
@@ -32,7 +31,7 @@ namespace ASP_28_12.Repositories
 
         public async Task<PagedList<User>> GetAllPaging(UserPagingRequest userPagingRequest)
         {
-            var query = _db.Users.AsQueryable();
+            var query = _db.Users.Include(x => x.Orders).AsQueryable();
 
             if (!string.IsNullOrEmpty(userPagingRequest.UserName))
             {

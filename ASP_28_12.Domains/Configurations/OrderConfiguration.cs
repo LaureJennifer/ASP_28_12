@@ -13,7 +13,6 @@ namespace ASP_28_12.Domains.Configurations
             builder.HasKey(o => o.ID); // Đặt trường ID làm khóa chính
             builder.Property(c => c.ID).ValueGeneratedOnAdd();
 
-            builder.Property(o => o.CustomerID).IsRequired(); // Yêu cầu trường CustomerID không được null
 
             builder.Property(o => o.UserID).IsRequired();
 
@@ -21,11 +20,7 @@ namespace ASP_28_12.Domains.Configurations
 
             builder.Property(o => o.Status).IsRequired(); // Yêu cầu trường Status không được null
             builder.Property(o => o.TotalFee).IsRequired();
-            builder.HasOne(e => e.Customer)
-                .WithMany(c => c.Orders)
-                .HasForeignKey(e => e.CustomerID)
-                .OnDelete(DeleteBehavior.Cascade);
-
+           
             builder.HasOne(e => e.User)
                 .WithMany(c => c.Orders)
                 .HasForeignKey(e => e.UserID)

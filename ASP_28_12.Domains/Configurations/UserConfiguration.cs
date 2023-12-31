@@ -13,7 +13,7 @@ namespace ASP_28_12.Domains.Configurations
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
             builder.Property(x => x.Address).IsRequired();
             builder.Property(p => p.CreatedDate).HasDefaultValue(DateTimeOffset.UtcNow);
-            builder.Property(p=> p.UrlImage).IsRequired();
+            builder.Property(p => p.UrlImage).IsRequired();
         }
     }
 
