@@ -4,6 +4,7 @@ using ASP_28_12.Domains.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ASP_28_12.Domains.Migrations
 {
     [DbContext(typeof(FlowerDbContext))]
-    partial class FlowerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231231032201_updatedbremoveCustomer")]
+    partial class updatedbremoveCustomer
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,7 +33,7 @@ namespace ASP_28_12.Domains.Migrations
                     b.Property<DateTimeOffset>("OrderDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetimeoffset")
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2023, 12, 31, 3, 44, 2, 451, DateTimeKind.Unspecified).AddTicks(4094), new TimeSpan(0, 0, 0, 0, 0)));
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2023, 12, 31, 3, 22, 1, 68, DateTimeKind.Unspecified).AddTicks(8045), new TimeSpan(0, 0, 0, 0, 0)));
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -78,7 +80,7 @@ namespace ASP_28_12.Domains.Migrations
                     b.Property<DateTimeOffset>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetimeoffset")
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2023, 12, 31, 3, 44, 2, 451, DateTimeKind.Unspecified).AddTicks(3621), new TimeSpan(0, 0, 0, 0, 0)));
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2023, 12, 31, 3, 22, 1, 68, DateTimeKind.Unspecified).AddTicks(7557), new TimeSpan(0, 0, 0, 0, 0)));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -98,32 +100,32 @@ namespace ASP_28_12.Domains.Migrations
                     b.HasData(
                         new
                         {
-                            ID = new Guid("6471b1c0-5e6a-4045-9da3-13367a02508c"),
-                            CreatedDate = new DateTimeOffset(new DateTime(2023, 12, 31, 3, 44, 2, 451, DateTimeKind.Unspecified).AddTicks(9149), new TimeSpan(0, 0, 0, 0, 0)),
+                            ID = new Guid("15948c02-8324-42ca-83f4-2fb076c40d59"),
+                            CreatedDate = new DateTimeOffset(new DateTime(2023, 12, 31, 3, 22, 1, 69, DateTimeKind.Unspecified).AddTicks(3393), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Flower 1",
                             Price = 500.0,
                             UrlImage = "https://i.pinimg.com/564x/af/8c/a5/af8ca581043ca4c3a25252344a5a7b34.jpg"
                         },
                         new
                         {
-                            ID = new Guid("9051850a-18b3-476f-a43a-6aefb49e53df"),
-                            CreatedDate = new DateTimeOffset(new DateTime(2023, 12, 31, 10, 44, 2, 451, DateTimeKind.Unspecified).AddTicks(9151), new TimeSpan(0, 7, 0, 0, 0)),
+                            ID = new Guid("0e8b3f84-6a20-4b32-8d89-86d39ae39e86"),
+                            CreatedDate = new DateTimeOffset(new DateTime(2023, 12, 31, 10, 22, 1, 69, DateTimeKind.Unspecified).AddTicks(3396), new TimeSpan(0, 7, 0, 0, 0)),
                             Name = "Flower 2",
                             Price = 600.0,
                             UrlImage = "https://i.pinimg.com/564x/af/8c/a5/af8ca581043ca4c3a25252344a5a7b34.jpg"
                         },
                         new
                         {
-                            ID = new Guid("d5a9fe7e-b0b0-4162-a1ef-9a92669c4a34"),
-                            CreatedDate = new DateTimeOffset(new DateTime(2023, 12, 31, 3, 44, 2, 451, DateTimeKind.Unspecified).AddTicks(9173), new TimeSpan(0, 0, 0, 0, 0)),
+                            ID = new Guid("095b5bba-61a9-4224-82c7-52b3c08f4b05"),
+                            CreatedDate = new DateTimeOffset(new DateTime(2023, 12, 31, 3, 22, 1, 69, DateTimeKind.Unspecified).AddTicks(3416), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Flower 3",
                             Price = 450.0,
                             UrlImage = "https://i.pinimg.com/564x/af/8c/a5/af8ca581043ca4c3a25252344a5a7b34.jpg"
                         },
                         new
                         {
-                            ID = new Guid("ec3fbee9-36c9-4fbc-8098-a2fb6f18386f"),
-                            CreatedDate = new DateTimeOffset(new DateTime(2023, 12, 31, 10, 44, 2, 451, DateTimeKind.Unspecified).AddTicks(9174), new TimeSpan(0, 7, 0, 0, 0)),
+                            ID = new Guid("a3701069-cc10-4105-b294-1f30cd9a3468"),
+                            CreatedDate = new DateTimeOffset(new DateTime(2023, 12, 31, 10, 22, 1, 69, DateTimeKind.Unspecified).AddTicks(3417), new TimeSpan(0, 7, 0, 0, 0)),
                             Name = "Flower 4",
                             Price = 420.0,
                             UrlImage = "https://i.pinimg.com/564x/af/8c/a5/af8ca581043ca4c3a25252344a5a7b34.jpg"
@@ -173,7 +175,7 @@ namespace ASP_28_12.Domains.Migrations
                     b.Property<DateTimeOffset>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetimeoffset")
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2023, 12, 31, 3, 44, 2, 451, DateTimeKind.Unspecified).AddTicks(7506), new TimeSpan(0, 0, 0, 0, 0)));
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2023, 12, 31, 3, 22, 1, 69, DateTimeKind.Unspecified).AddTicks(1598), new TimeSpan(0, 0, 0, 0, 0)));
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
@@ -222,11 +224,11 @@ namespace ASP_28_12.Domains.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("556e080a-6204-4934-b7dc-f6ee2e931890"),
+                            Id = new Guid("f6e922b9-760f-47e2-8761-dea1ff4e774c"),
                             AccessFailedCount = 0,
                             Address = "Tuyên Quang",
-                            ConcurrencyStamp = "123ecd17-861b-44ff-a9eb-f3449e4dcc16",
-                            CreatedDate = new DateTimeOffset(new DateTime(2023, 12, 31, 10, 44, 2, 451, DateTimeKind.Unspecified).AddTicks(9275), new TimeSpan(0, 7, 0, 0, 0)),
+                            ConcurrencyStamp = "1db33616-a4a3-4f7c-b0b3-fd6ee6ab9c7c",
+                            CreatedDate = new DateTimeOffset(new DateTime(2023, 12, 31, 10, 22, 1, 69, DateTimeKind.Unspecified).AddTicks(3507), new TimeSpan(0, 7, 0, 0, 0)),
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumber = "0349485127",
@@ -237,11 +239,11 @@ namespace ASP_28_12.Domains.Migrations
                         },
                         new
                         {
-                            Id = new Guid("d021da14-e0d3-4878-b73a-d11feacf27dd"),
+                            Id = new Guid("ee685205-ff00-498c-b237-a79e43d9d89a"),
                             AccessFailedCount = 0,
                             Address = "Tuyên Quang",
-                            ConcurrencyStamp = "00c745c4-fd1b-4010-ba3f-6170fa25bd68",
-                            CreatedDate = new DateTimeOffset(new DateTime(2023, 12, 31, 10, 44, 2, 451, DateTimeKind.Unspecified).AddTicks(9279), new TimeSpan(0, 7, 0, 0, 0)),
+                            ConcurrencyStamp = "02e3e400-48a4-4723-9273-138216c004da",
+                            CreatedDate = new DateTimeOffset(new DateTime(2023, 12, 31, 10, 22, 1, 69, DateTimeKind.Unspecified).AddTicks(3511), new TimeSpan(0, 7, 0, 0, 0)),
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumber = "0349485127",
@@ -252,11 +254,11 @@ namespace ASP_28_12.Domains.Migrations
                         },
                         new
                         {
-                            Id = new Guid("1ea05476-18bc-4591-be64-5520c2d3549c"),
+                            Id = new Guid("848db435-a2a8-4045-bd44-1a0aa64b3764"),
                             AccessFailedCount = 0,
                             Address = "Tuyên Quang",
-                            ConcurrencyStamp = "16a3023e-828c-40e6-99ac-6d8725fde2ad",
-                            CreatedDate = new DateTimeOffset(new DateTime(2023, 12, 31, 10, 44, 2, 451, DateTimeKind.Unspecified).AddTicks(9282), new TimeSpan(0, 7, 0, 0, 0)),
+                            ConcurrencyStamp = "746659bd-f460-4629-8fad-e24309df51e9",
+                            CreatedDate = new DateTimeOffset(new DateTime(2023, 12, 31, 10, 22, 1, 69, DateTimeKind.Unspecified).AddTicks(3516), new TimeSpan(0, 7, 0, 0, 0)),
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumber = "0349485127",
@@ -267,11 +269,11 @@ namespace ASP_28_12.Domains.Migrations
                         },
                         new
                         {
-                            Id = new Guid("5bef7620-9820-4957-b9cf-1adb1e67d37a"),
+                            Id = new Guid("cefcf843-13c8-4e08-8c7c-982fc6f0bbb6"),
                             AccessFailedCount = 0,
                             Address = "Tuyên Quang",
-                            ConcurrencyStamp = "86e11bec-6866-42a4-bd96-68f581cee3c7",
-                            CreatedDate = new DateTimeOffset(new DateTime(2023, 12, 31, 10, 44, 2, 451, DateTimeKind.Unspecified).AddTicks(9285), new TimeSpan(0, 7, 0, 0, 0)),
+                            ConcurrencyStamp = "04cc2f9e-f28b-4060-824f-9f463dfe1b02",
+                            CreatedDate = new DateTimeOffset(new DateTime(2023, 12, 31, 10, 22, 1, 69, DateTimeKind.Unspecified).AddTicks(3519), new TimeSpan(0, 7, 0, 0, 0)),
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumber = "0349485127",

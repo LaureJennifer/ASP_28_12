@@ -1,5 +1,4 @@
 ﻿using ASP_28_12.Application.Catalog.ProductApp.Request;
-using ASP_28_12.Application.Catalog.UserApp.Request;
 using ASP_28_12.Application.ViewModels.Pagination;
 using ASP_28_12.Domains.Entities;
 using ASP_28_12.Repositories;
@@ -28,6 +27,7 @@ namespace ASP_28_12.Controllers
                 ID = x.ID,
                 Name = x.Name,
                 Price = x.Price,
+                UrlImage = x.UrlImage,
                 CreatedDate = DateTime.Now
             });
             return Ok(new PagedList<Product>(productDtosByName.ToList(),
@@ -35,7 +35,7 @@ namespace ASP_28_12.Controllers
                 pageList.MetaData.CurrentPage,
                 pageList.MetaData.PageSize));
         }
-        
+
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] ProductCreateRequest request)
         {
@@ -47,7 +47,9 @@ namespace ASP_28_12.Controllers
                 ID = request.ID,
                 CreatedDate = DateTime.Now,
                 Name = request.Name,
-                Price = request.Price
+                Price = request.Price,
+                UrlImage = request.UrlImage,
+                
 
             });
             return CreatedAtAction(nameof(GetById), new { request.ID }, request);
@@ -69,6 +71,7 @@ namespace ASP_28_12.Controllers
             productUpdate.Name = request.Name;
             productUpdate.Price = request.Price;
             productUpdate.CreatedDate = DateTime.Now;
+            productUpdate.UrlImage = request.UrlImage;
 
             var result = await _productRepository.Update(productUpdate);
             return Ok(new Product()
@@ -76,7 +79,8 @@ namespace ASP_28_12.Controllers
                 Name = result.Name,
                 CreatedDate = DateTimeOffset.Now,
                 Price = result.Price,
-                ID = result.ID
+                ID = result.ID,
+                UrlImage= result.UrlImage,
             });
         }
         [HttpGet]
@@ -93,7 +97,9 @@ namespace ASP_28_12.Controllers
                 Name = result.Name,
                 CreatedDate = result.CreatedDate,
                 Price = result.Price,
-                ID = result.ID
+                ID = result.ID,
+                UrlImage= result.UrlImage,
+                
             });
         }
         [HttpDelete]
@@ -109,7 +115,8 @@ namespace ASP_28_12.Controllers
                 Name = product.Name,
                 CreatedDate = product.CreatedDate,
                 Price = product.Price,
-                ID = product.ID
+                ID = product.ID,
+                UrlImage = product.UrlImage,
             });
         }
 

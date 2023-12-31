@@ -1,5 +1,4 @@
 ﻿using ASP_28_12.Application.Catalog.ProductApp.Request;
-using ASP_28_12.Application.Catalog.UserApp.Request;
 using ASP_28_12.Application.ViewModels.Pagination;
 using ASP_28_12.Domains.EF;
 using ASP_28_12.Domains.Entities;
@@ -17,7 +16,7 @@ namespace ASP_28_12.Repositories
 
         public async Task<Product> Create(Product product)
         {
-            _db.Products.Add(product);
+            await _db.Products.AddAsync(product);
             await _db.SaveChangesAsync();
             return product;
         }
@@ -31,7 +30,7 @@ namespace ASP_28_12.Repositories
 
         public async Task<PagedList<Product>> GetAllPaging(ProductPagingRequest productPagingRequest)
         {
-            var query = _db.Products.AsQueryable();
+            var query = _db.Products.Include(x => x.OrderDetails).AsQueryable();
 
             if (!string.IsNullOrEmpty(productPagingRequest.ProductName))
             {
