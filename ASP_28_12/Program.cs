@@ -24,6 +24,7 @@ namespace ASP_28_12
             builder.Services.AddTransient<IProductRepository, ProductRepository>();
             builder.Services.AddTransient<IUserRepository, UserRepository>();
             builder.Services.AddTransient<IOrderRepository, OrderRepository>();
+            builder.Services.AddTransient<IOrderDetailsRepository, OrderDetailsRepository>();
 
             var app = builder.Build();
 

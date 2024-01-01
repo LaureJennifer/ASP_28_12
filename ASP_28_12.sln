@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34316.72
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASP_28_12", "ASP_28_12\ASP_28_12.csproj", "{C9970264-979F-4EB7-9833-DD06CEE5BBF3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP_28_12", "ASP_28_12\ASP_28_12.csproj", "{C9970264-979F-4EB7-9833-DD06CEE5BBF3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASP_28_12.Application", "ASP_28_12.Data\ASP_28_12.Application.csproj", "{C9C262F2-4D4E-49EB-856D-11097A7D1AB2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP_28_12.Application", "ASP_28_12.Data\ASP_28_12.Application.csproj", "{C9C262F2-4D4E-49EB-856D-11097A7D1AB2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASP_28_12.Infrastructure", "ASP_28_12.Infrastructure\ASP_28_12.Infrastructure.csproj", "{2CF78DF7-6328-44F3-B616-F4C7F3145FD2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP_28_12.Infrastructure", "ASP_28_12.Infrastructure\ASP_28_12.Infrastructure.csproj", "{2CF78DF7-6328-44F3-B616-F4C7F3145FD2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASP_28_12.Domains", "ASP_28_12.Domains\ASP_28_12.Domains.csproj", "{CF69EA4D-BFC5-4977-8473-E5875D9D8A77}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP_28_12.Domains", "ASP_28_12.Domains\ASP_28_12.Domains.csproj", "{CF69EA4D-BFC5-4977-8473-E5875D9D8A77}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP_View", "ASP_View\ASP_View.csproj", "{2C86EBC0-3641-4574-8BD8-1D879BD22C47}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{CF69EA4D-BFC5-4977-8473-E5875D9D8A77}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CF69EA4D-BFC5-4977-8473-E5875D9D8A77}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CF69EA4D-BFC5-4977-8473-E5875D9D8A77}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C86EBC0-3641-4574-8BD8-1D879BD22C47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C86EBC0-3641-4574-8BD8-1D879BD22C47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C86EBC0-3641-4574-8BD8-1D879BD22C47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C86EBC0-3641-4574-8BD8-1D879BD22C47}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

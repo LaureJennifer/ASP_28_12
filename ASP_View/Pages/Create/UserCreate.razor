@@ -1,0 +1,54 @@
+﻿@page "/usercreate"
+@using ASP_28_12.Application.Catalog.UserApp.Request
+@using ASP_View.Services.UserSer
+
+<MudText Color="Color.Primary" Typo="Typo.h4">Tạo người dùng mới</MudText>
+
+@inject ISnackbar _snackbar;
+@inject IUserApiClient _userApiClient;
+@inject NavigationManager _navigate;
+
+<EditForm Model="@userCreateRequest" OnValidSubmit="OnValidSubmit">
+    <MudCard>
+        <MudCardContent>
+            <MudTextField Label="Tên người dùng" @bind-Value="userCreateRequest.UserName" />
+            <MudTextField Label="Hnh ảnh" @bind-Value="userCreateRequest.UrlImage" @oninput="ImageSelected" />
+            <MudTextField Label="Email" @bind-Value="userCreateRequest.Email" />
+            <MudTextField Label="Địa chỉ" @bind-Value="userCreateRequest.Address" />
+            <MudTextField Label="Số điện thoại" @bind-Value="userCreateRequest.PhoneNumber" />
+            @if (!string.IsNullOrEmpty(linkImg))
+            {
+                <MudImage Src="@userCreateRequest.UrlImage" Width="150"></MudImage>
+            }
+        </MudCardContent>
+        <MudCardActions>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Success" Class="ml-auto">Create</MudButton>
+        </MudCardActions>
+    </MudCard>
+</EditForm>
+
+@code {
+    UserCreateRequest userCreateRequest = new();
+    string linkImg = "";
+
+    private void ImageSelected(ChangeEventArgs e)
+    {
+        string value = e.Value.ToString();
+
+        userCreateRequest.UrlImage = value;
+
+    }
+
+    private async Task OnValidSubmit(EditContext context)
+    {
+        userCreateRequest.ID = Guid.NewGuid();
+        var result = await _userApiClient.CreateUser(userCreateRequest);
+        if (result)
+        {
+            _snackbar.Add("thêm thành công", Severity.Success);
+            _navigate.NavigateTo("/users");
+        }
+        StateHasChanged();
+    }
+
+}
