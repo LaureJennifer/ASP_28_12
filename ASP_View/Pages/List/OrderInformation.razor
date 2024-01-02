@@ -4,45 +4,47 @@
 @using ASP_28_12.Domains.Entities
 @using ASP_View.Services.OrderSer
 
-
+<MudText Typo="Typo.h4" Color="Color.Primary" Class="mb-3">Thông tin đơn hàng</MudText>
 @inject ISnackbar _snackbar;
 
-@if (_lstUser == null)
+@if (_lstOrder == null)
 {
     <MudProgressCircular Color="Color.Warning" Indeterminate="true"></MudProgressCircular>
 }
 else
 {
-    <EditForm Model="@orderPagingRequest">
+    <EditForm Model="@orderPagingRequest" class="mb-5">
         <MudGrid>
             <MudItem xs="8" md="8">
-                <label>User ID</label>
-                <InputText class="form-control" @bind-Value="orderPagingRequest.UserID"></InputText>
+                
+                <MudInput class="form-control" Placeholder="UserID" @bind-Value="orderPagingRequest.UserID"></MudInput>
             </MudItem>
             <MudItem xs="2" md="2">
-                <MudButton OnClick="()=>SearchByTextFilled()" class="btn btn-primary mt-5 text-center" Color="Color.Primary" Variant="Variant.Filled">Search</MudButton>
+                <MudButton OnClick="()=>SearchByTextFilled()" Class="mt-1" Color="Color.Primary" Variant="Variant.Filled">Search</MudButton>
             </MudItem>
             <MudItem xs="2" md="2" C>
-                <MudButton Color="Color.Primary" Variant="Variant.Filled" class="mt-5" OnClick="()=>NavigateToOrderCreate()">Thêm mới</MudButton>
+                <MudButton Color="Color.Primary" Class="mt-1" Variant="Variant.Filled" OnClick="()=>NavigateToOrderCreate()">Thêm mới</MudButton>
             </MudItem>
         </MudGrid>
 
     </EditForm>
 
-    <MudText Typo="Typo.h4" Color="Color.Success">List User</MudText>
+    
 
     <MudTable Items="@_lstOrder" Hover="true" Striped="true" FixedHeader="true">
         <HeaderContent>
             <MudTh>STT</MudTh>
             <MudTh class="text-center">User ID</MudTh>
-            <MudTh>Ngày đặt</MudTh>
+            <MudTh class="text-center">Ngày đặt</MudTh>
             <MudTh class="text-center">Tổng phí</MudTh>
             <MudTh class="text-center">Trạng thái</MudTh>
+            <MudTh class="text-center">Hành động</MudTh>
+
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="">@(_lstUser.IndexOf(context) + 1)</MudTd>
-            <MudTd DataLabel="">@context.UserID</MudTd>
-                <MudTd DataLabel="" class="text-center">@context.CreatedDate.ToString("hh:mm tt dd/MM/yyyy")</MudTd>
+            <MudTd DataLabel="">@(_lstOrder.IndexOf(context) + 1)</MudTd>
+            <MudTd DataLabel="" Class="text-center">@context.UserID</MudTd>
+                <MudTd DataLabel="" Class="text-center">@context.OrderDate.ToString("hh:mm tt dd/MM/yyyy")</MudTd>
                 <MudTd DataLabel="" Class="text-center">@context.TotalFee</MudTd>
                 <MudTd DataLabel="" Class="text-center">@context.Status</MudTd>
 
@@ -52,13 +54,13 @@ else
                         <MudItem xs="4" md="4">
                             <MudGrid>
                                 <MudItem xs="4" md="4">
-                                    <MudIconButton Icon="@Icons.Material.Filled.Info" Color="Color.Warning" OnClick="()=>NavigateToDetails(context.Id.ToString())"></MudIconButton>
+                                    <MudIconButton Icon="@Icons.Material.Filled.Info" Color="Color.Warning" OnClick="()=>NavigateToDetails(context.ID.ToString())"></MudIconButton>
                                 </MudItem>
                                 <MudItem xs="4" md="4">
-                                    <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Success" OnClick="()=>NavigateToOrderUpdate(context.Id.ToString())"></MudIconButton>
+                                    <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Success" OnClick="()=>NavigateToOrderUpdate(context.ID.ToString())"></MudIconButton>
                                 </MudItem>
                                 <MudItem xs="4" md="4">
-                                    <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="()=>OnDeleteClicked(context.Id.ToString())"></MudIconButton>
+                                    <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="()=>OnDeleteClicked(context.ID.ToString())"></MudIconButton>
                                 </MudItem>
                             </MudGrid>
                         </MudItem>
@@ -135,13 +137,14 @@ else
     }
     private async Task OnConfirmDelete()
     {
-        await _orderApiClient.DeleteUser(orderDelete.ID);
-        await GetUserList();
+        await _orderApiClient.DeleteOrder(orderDelete.ID);
+        await GetOrderList();
         _snackbar.Add("Xóa thành công", Severity.Success);
         StateHasChanged();
     }
     private async Task GetOrderList()
     {
+        
         pagingRespone = await _orderApiClient.GetOrder(orderPagingRequest);
         _lstOrder = pagingRespone.Items;
         metadata = pagingRespone.MetaData;

@@ -1,0 +1,63 @@
+﻿@page "/orderupdate/{orderId}"
+@using ASP_28_12.Application.Catalog.OrderApp.Request
+@using ASP_28_12.Domains.Enums
+@using ASP_View.Services.OrderSer
+
+
+<MudText Color="Color.Primary" Typo="Typo.h4">Cập nhật thông tin đơn hàng</MudText>
+
+@inject ISnackbar _snackbar;
+@inject IOrderApiClient _orderApiClient;
+@inject NavigationManager _navigate;
+
+<EditForm Model="orderUpdateRequest" OnValidSubmit="OnSubmit">
+    <MudCard>
+        <MudCardContent>
+            <MudTextField Label="ID người dùng" @bind-Value="orderUpdateRequest.UserID" />
+            <MudTextField Label="Ngày đặt" @bind-Value="orderUpdateRequest.OrderDate"/>
+            <MudTextField Label="Tổng chi phí" @bind-Value="orderUpdateRequest.TotalFee" />
+            <MudSelect T="Status" Label="Status" Variant="Variant.Outlined" @bind-Value="orderUpdateRequest.Status" AnchorOrigin="Origin.BottomCenter">
+                @foreach (Status status in Enum.GetValues(typeof(Status)))
+                {
+                    <MudSelectItem T="Status" Value="status">@status.ToString()</MudSelectItem>
+                }
+            </MudSelect>
+        </MudCardContent>
+        <MudCardActions>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Success" Class="ml-auto">Update</MudButton>
+        </MudCardActions>
+    </MudCard>
+
+</EditForm>
+
+@code {
+    [Parameter]
+    public string orderId { set; get; }
+
+    OrderUpdateRequest orderUpdateRequest = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var orderDto = await _orderApiClient.GetOrderDetails(orderId);
+        orderUpdateRequest.UserID = orderDto.UserID;
+        orderUpdateRequest.Status = orderDto.Status;
+        orderUpdateRequest.TotalFee = orderDto.TotalFee;
+        orderUpdateRequest.OrderDate = orderDto.OrderDate;
+
+    }
+    private async Task OnSubmit()
+    {
+        var result = await _orderApiClient.UpdateOrder(Guid.Parse(orderId), orderUpdateRequest);
+
+        if (result)
+        {
+            _snackbar.Add("Cập nhật thành công", Severity.Success);
+            _navigate.NavigateTo("/orders");
+        }else 
+            _snackbar.Add("Cập nhật thất bại", Severity.Success);
+
+        StateHasChanged();
+    }
+
+
+}

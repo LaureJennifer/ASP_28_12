@@ -5,30 +5,28 @@
 @using ASP_View.Services.UserSer
 
 @inject ISnackbar _snackbar;
-
+<MudText Typo="Typo.h4" Color="Color.Primary" Class="mb-3">Thông tin người dùng</MudText>
 @if (_lstUser == null)
 {
     <MudProgressCircular Color="Color.Warning" Indeterminate="true"></MudProgressCircular>
 }
 else
 {
-    <EditForm Model="@userPagingRequest">
+    <EditForm Model="@userPagingRequest" class="mb-5">
         <MudGrid>
             <MudItem xs="8" md="8">
-                <label>Name</label>
-                <InputText class="form-control" @bind-Value="userPagingRequest.UserName"></InputText>
+
+                <MudInput Placeholder="Tên người dùng" class="form-control" @bind-Value="userPagingRequest.UserName"></MudInput>
             </MudItem>
             <MudItem xs="2" md="2">
-                <MudButton OnClick="()=>SearchByTextFilled()" class="btn btn-primary mt-5 text-center" Color="Color.Primary" Variant="Variant.Filled">Search</MudButton>
+                <MudButton OnClick="()=>SearchByTextFilled()" class="mt-1" Color="Color.Primary" Variant="Variant.Filled">Search</MudButton>
             </MudItem>
             <MudItem xs="2" md="2" C>
-                <MudButton Color="Color.Primary" Variant="Variant.Filled" class="mt-5" OnClick="()=>NavigateToUserCreate()">Thêm mới</MudButton>
+                <MudButton Color="Color.Primary" Variant="Variant.Filled" class="mt-1" OnClick="()=>NavigateToUserCreate()">Thêm mới</MudButton>
             </MudItem>
         </MudGrid>
 
     </EditForm>
-
-    <MudText Typo="Typo.h4" Color="Color.Success">List User</MudText>
 
     <MudTable Items="@_lstUser" Hover="true" Striped="true" FixedHeader="true">
         <HeaderContent>

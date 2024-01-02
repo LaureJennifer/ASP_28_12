@@ -1,5 +1,6 @@
 using ASP_28_12.Domains.EF;
 using ASP_View.Data;
+using ASP_View.Services.OrderSer;
 using ASP_View.Services.ProductSer;
 using ASP_View.Services.UserSer;
 using Microsoft.AspNetCore.Components;
@@ -22,6 +23,7 @@ namespace ASP_View
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7066") });
             builder.Services.AddTransient<IProductApiClient, ProductApiClient>();
             builder.Services.AddTransient<IUserApiClient, UserApiClient>();
+            builder.Services.AddTransient<IOrderApiClient, OrderApiClient>();
 
             builder.Services.AddMudServices();
             builder.Services.AddDbContext<FlowerDbContext>(options =>

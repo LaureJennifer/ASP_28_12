@@ -33,7 +33,7 @@ namespace ASP_View.Services.OrderSer
                 ["pageNumber"] = orderPagingRequest.PageNumber.ToString()
             };
             string querySearch = orderPagingRequest.UserID.ToString();
-            if (!string.IsNullOrEmpty(querySearch)) queryStringPara.Add("orderPagingRequest.UserID.ToString()", orderPagingRequest.UserID.ToString());
+            if (!string.IsNullOrEmpty(querySearch)) queryStringPara.Add("userid", orderPagingRequest.UserID.ToString());
             string url = QueryHelpers.AddQueryString("/api/order", queryStringPara);
             var result = await _httpClient.GetFromJsonAsync<PagedList<Order>>(url);
             return result;

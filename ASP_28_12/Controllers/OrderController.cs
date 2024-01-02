@@ -28,7 +28,7 @@ namespace ASP_28_12.Controllers
                 UserID = x.UserID,
                 TotalFee = x.TotalFee,
                 Status = x.Status,
-                OrderDate = DateTimeOffset.UtcNow
+                OrderDate = x.OrderDate
             });
             return Ok(new PagedList<Order>(orderDtosByName.ToList(),
                 pageList.MetaData.TotalCount,
@@ -48,7 +48,7 @@ namespace ASP_28_12.Controllers
                 UserID = request.UserID,
                 TotalFee = request.TotalFee,
                 Status = request.Status,
-                OrderDate = DateTimeOffset.UtcNow
+                OrderDate = request.OrderDate
 
             });
             return CreatedAtAction(nameof(GetById), new { request.ID }, request);
@@ -70,7 +70,7 @@ namespace ASP_28_12.Controllers
             orderUpdate.UserID = request.UserID;
             orderUpdate.TotalFee = request.TotalFee;
             orderUpdate.Status = request.Status;
-            orderUpdate.OrderDate = DateTime.Now;
+            orderUpdate.OrderDate = request.OrderDate;
 
             var result = await _orderRepository.Update(orderUpdate);
             return Ok(new Order()

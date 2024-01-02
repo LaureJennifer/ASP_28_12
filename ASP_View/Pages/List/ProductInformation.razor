@@ -5,30 +5,28 @@
 @using ASP_View.Services.ProductSer
 
 @inject ISnackbar _snackbar;
-
+<MudText Typo="Typo.h4" Color="Color.Primary" Class="mb-3">Thông tin sản phẩm</MudText>
 @if (_lstProduct == null)
 {
     <MudProgressCircular Color="Color.Warning" Indeterminate="true"></MudProgressCircular>
 }
 else
 {
-    <EditForm Model="@productPagingRequest">
+    <EditForm Model="@productPagingRequest" class="mb-5">
         <MudGrid>
             <MudItem xs="8" md="8">              
-                 <label>Name</label>
-                <InputText class="form-control" @bind-Value="productPagingRequest.ProductName"></InputText>              
+                 
+                <MudInput Placeholder="Tên sản phẩm" class="form-control" @bind-Value="productPagingRequest.ProductName"></MudInput>              
             </MudItem>
             <MudItem xs="2" md="2">
-                <MudButton OnClick="()=>SearchByTextFilled()" class="btn btn-primary mt-5 text-center" Color="Color.Primary" Variant="Variant.Filled">Search</MudButton>
+                <MudButton OnClick="()=>SearchByTextFilled()" class="mt-1" Color="Color.Primary" Variant="Variant.Filled">Search</MudButton>
             </MudItem>
             <MudItem xs="2" md="2" C >
-                <MudButton Color="Color.Primary" Variant="Variant.Filled" class="mt-5" OnClick="()=>NavigateToTaskCreate()">Thêm mới</MudButton>
+                <MudButton Color="Color.Primary" Variant="Variant.Filled" class="mt-1" OnClick="()=>NavigateToTaskCreate()">Thêm mới</MudButton>
             </MudItem>
         </MudGrid>
         
     </EditForm>
-
-    <MudText Typo="Typo.h4" Color="Color.Success">List Product</MudText>
 
     <MudTable Items="@_lstProduct" Hover="true" Striped="true" FixedHeader="true">
         <HeaderContent>
