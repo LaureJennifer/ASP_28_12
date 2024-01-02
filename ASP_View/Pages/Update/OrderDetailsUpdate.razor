@@ -1,0 +1,55 @@
+﻿@page "/orderdetailsupdate/{orderDetailsId}"
+@using ASP_28_12.Application.Catalog.OrderDetailsApp.Request
+@using ASP_View.Services.OrderDetailsSer
+
+<MudText Color="Color.Primary" Typo="Typo.h4">Cập nhật thông tin chi tiết đơn hàng cho đơn đặt hàng</MudText>
+
+@inject ISnackbar _snackbar;
+@inject IOrderDetailsApiClient _orderDetailsApiClient;
+@inject NavigationManager _navigate;
+
+<EditForm Model="orderDetailsUpdateRequest" OnValidSubmit="OnSubmit">
+    <MudCard>
+        <MudCardContent>
+            <MudTextField Label="Mã đơn hàng" @bind-Value="orderDetailsUpdateRequest.OrderID" />
+            <MudTextField Label="Mã sản phẩm" @bind-Value="orderDetailsUpdateRequest.ProductID" />
+            <MudTextField Label="Số lượng" @bind-Value="orderDetailsUpdateRequest.Quantity" />
+
+        </MudCardContent>
+        <MudCardActions>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Success" Class="ml-auto">Update</MudButton>
+        </MudCardActions>
+    </MudCard>
+
+</EditForm>
+
+@code {
+    [Parameter]
+    public string orderDetailsId { set; get; }
+
+    OrderDetailsUpdateRequest orderDetailsUpdateRequest = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var orderDetailsDto = await _orderDetailsApiClient.GetDetails(orderDetailsId);
+        orderDetailsUpdateRequest.OrderID = orderDetailsDto.OrderID;
+        orderDetailsUpdateRequest.ProductID = orderDetailsDto.ProductID;
+        orderDetailsUpdateRequest.Quantity = orderDetailsDto.Quantity;
+    }
+    private async Task OnSubmit()
+    {
+        var result = await _orderDetailsApiClient.UpdateOrderDetails(Guid.Parse(orderDetailsId), orderDetailsUpdateRequest);
+
+        if (result)
+        {
+            _snackbar.Add("Cập nhật thành công", Severity.Success);
+            _navigate.NavigateTo("/orderdetailsoforder");
+        }
+        else
+            _snackbar.Add("Cập nhật thất bại", Severity.Success);
+
+        StateHasChanged();
+    }
+
+
+}

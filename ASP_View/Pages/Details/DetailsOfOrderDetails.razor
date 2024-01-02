@@ -1,0 +1,51 @@
+﻿@page "/orderdetails/details/{orderDetailsId}"
+@using ASP_View.Services.OrderDetailsSer
+
+<MudText Color="Color.Primary" Typo="Typo.h4" Class="mb-5">Thông tin chi tiết của chi tiết đơn hàng</MudText>
+
+@inject IOrderDetailsApiClient _orderDetailsApiClient;
+
+@if (_orderDetailsForOrderDto == null)
+{
+    <MudText>bị null</MudText>
+}
+else
+{
+    <MudGrid>
+        <MudItem xs="6" md="6">
+            <MudSimpleTable>
+            
+                    <MudTr>
+                        <MudTd>Mã chi tiết đơn hàng</MudTd>
+                        <MudTd>@_orderDetailsForOrderDto.OrderDetailsID</MudTd>
+                    </MudTr>
+                        <MudTr>
+                    <MudTd>Mã đơn hàng</MudTd>
+                    <MudTd>@_orderDetailsForOrderDto.OrderID</MudTd>
+                    </MudTr>
+                    <MudTr>
+                        <MudTd>Mã người dùng</MudTd>
+                        <MudTd>@_orderDetailsForOrderDto.ProductID</MudTd>
+                    </MudTr>
+                    <MudTr>
+                        <MudTd>Số lượng</MudTd>
+                        <MudTd>@_orderDetailsForOrderDto.Quantity</MudTd>
+                    </MudTr>
+                    
+                </MudSimpleTable>
+
+            </MudItem>
+        </MudGrid>
+}
+
+@code {
+    [Parameter] public string orderDetailsId { get; set; }
+
+    private ASP_28_12.Domains.Entities.OrderDetails _orderDetailsForOrderDto { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _orderDetailsForOrderDto = await _orderDetailsApiClient.GetDetails(orderDetailsId);
+    }
+}
+

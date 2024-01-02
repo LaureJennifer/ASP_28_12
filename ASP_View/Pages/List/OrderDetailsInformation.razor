@@ -1,5 +1,157 @@
-﻿<h3>OrderDetailsInformation</h3>
+﻿@page "/orderdetailsoforder"
+@using ASP_28_12.Application.Catalog.OrderDetailsApp.Request
+@using ASP_28_12.Application.ViewModels.Pagination
+@using ASP_28_12.Domains.Entities
+@using ASP_View.Services.OrderDetailsSer
+
+<MudText Typo="Typo.h4" Color="Color.Primary" Class="mb-3">Thông tin chi tiết đơn hàng của đơn hàng</MudText>
+@inject ISnackbar _snackbar;
+
+@if (_lstOrderDetails == null)
+{
+    <MudProgressCircular Color="Color.Warning" Indeterminate="true"></MudProgressCircular>
+}
+else
+{
+    <EditForm Model="@orderDetailsPagingRequest" class="mb-5">
+        <MudGrid>
+            <MudItem xs="4" md="4">
+                <MudInput class="form-control" Placeholder="ProductID" @bind-Value="orderDetailsPagingRequest.ProductID"></MudInput>
+            </MudItem>
+            <MudItem xs="4" md="4">
+                <MudInput class="form-control" Placeholder="OrderID" @bind-Value="orderDetailsPagingRequest.OrderID"></MudInput>
+
+            </MudItem>
+            <MudItem xs="2" md="2">
+                <MudButton OnClick="()=>SearchByTextFilled()" Class="mt-1" Color="Color.Primary" Variant="Variant.Filled">Search</MudButton>
+            </MudItem>
+            <MudItem xs="2" md="2" C>
+                <MudButton Color="Color.Primary" Class="mt-1" Variant="Variant.Filled" OnClick="()=>NavigateToOrderDetailsCreate()">Thêm mới</MudButton>
+            </MudItem>
+        </MudGrid>
+
+    </EditForm>
+
+    <MudTable Items="@_lstOrderDetails" Hover="true" Striped="true" FixedHeader="true">
+        <HeaderContent>
+            <MudTh>STT</MudTh>
+            <MudTh class="text-center">Order ID</MudTh>
+            <MudTh class="text-center">Product ID</MudTh>
+            <MudTh class="text-center">Quantity</MudTh>
+            <MudTh class="text-center">Hành động</MudTh>
+
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="">@(_lstOrderDetails.IndexOf(context) + 1)</MudTd>
+            <MudTd DataLabel="" Class="text-center">@context.OrderID</MudTd>
+                <MudTd DataLabel="" Class="text-center">@context.ProductID</MudTd>
+                <MudTd DataLabel="" Class="text-center">@context.Quantity</MudTd>
+                <MudTd DataLabel="">
+                    <MudGrid>
+                        <MudItem xs="4" md="4" />
+                        <MudItem xs="4" md="4">
+                            <MudGrid>
+                                <MudItem xs="4" md="4">
+                                    <MudIconButton Icon="@Icons.Material.Filled.Info" Color="Color.Warning" OnClick="()=>NavigateToDetails(context.OrderDetailsID.ToString())"></MudIconButton>
+                                </MudItem>
+                                <MudItem xs="4" md="4">
+                                    <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Success" OnClick="()=>NavigateToOrderDetailsUpdate(context.OrderDetailsID.ToString())"></MudIconButton>
+                                </MudItem>
+                                <MudItem xs="4" md="4">
+                                    <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="()=>OnDeleteClicked(context.OrderDetailsID.ToString())"></MudIconButton>
+                                </MudItem>
+                            </MudGrid>
+                        </MudItem>
+                        <MudItem xs="4" md="4" />
+                    </MudGrid>
+
+                </MudTd>
+            </RowTemplate>
+            <PagerContent>
+                <MudGrid Class="mb-3">
+                    <MudItem xs="12" Class="d-flex justify-center mt-3">
+                        <MudPagination BoundaryCount="1" ShowPreviousButton="true" ShowNextButton="true" Count="(pagingRespone.MetaData.HasNext ? (pagingRespone.MetaData.CurrentPage + 1) :pagingRespone.MetaData.CurrentPage)" SelectedChanged="OnSelectPagination" />
+                    </MudItem>
+                </MudGrid>
+            </PagerContent>
+        </MudTable>
+
+    <MudMessageBox @ref="_mboxDelete" Title="Xác nhận" CancelText="Hủy">
+        <MessageContent>
+            Xác nhận xóa sản phẩm khỏi danh sách!
+        </MessageContent>
+        <YesButton>
+            <MudButton Color="Color.Primary" OnClick="OnConfirmDelete">
+                Xác nhận
+            </MudButton>
+        </YesButton>
+    </MudMessageBox>
+}
 
 @code {
+    [Inject] IOrderDetailsApiClient _orderDetailsApiClient { set; get; }
+    [Inject] NavigationManager _navigationManager { get; set; }
 
+    OrderDetails orderDetailsDelete { get; set; } = new();
+
+    MudMessageBox _mboxDelete { get; set; } = null!;
+
+    public MetaData metadata = new();
+
+    PagedList<OrderDetails> pagingRespone { get; set; } = new();
+
+    List<OrderDetails> _lstOrderDetails;
+
+    OrderDetailsPagingRequest orderDetailsPagingRequest = new();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetOrderDetailsList();
+    }
+    void NavigateToDetails(string orderDetailsId)
+    {
+        _navigationManager.NavigateTo($"/orderdetails/details/{orderDetailsId}");
+    }
+    void NavigateToOrderDetailsCreate()
+    {
+        _navigationManager.NavigateTo("/orderdetailscreate");
+    }
+    void NavigateToOrderDetailsUpdate(string orderDetailsId)
+    {
+        _navigationManager.NavigateTo($"/orderdetailsupdate/{orderDetailsId}");
+    }
+    private async Task SearchByTextFilled()
+    {
+        await GetOrderDetailsList();
+    }
+    private async Task OnDeleteClicked(string id)
+    {
+        orderDetailsDelete = await _orderDetailsApiClient.GetDetails(id);
+        bool? result = await _mboxDelete.Show();
+
+        StateHasChanged();
+
+    }
+    private async Task OnConfirmDelete()
+    {
+        await _orderDetailsApiClient.DeleteOrderDetails(orderDetailsDelete.OrderDetailsID);
+        await GetOrderDetailsList();
+        _snackbar.Add("Xóa thành công", Severity.Success);
+        StateHasChanged();
+    }
+    private async Task GetOrderDetailsList()
+    {
+
+        pagingRespone = await _orderDetailsApiClient.GetOrderDetails(orderDetailsPagingRequest);
+        _lstOrderDetails = pagingRespone.Items;
+        metadata = pagingRespone.MetaData;
+    }
+
+    async Task OnSelectPagination(int pageNumber)
+    {
+        orderDetailsPagingRequest.PageNumber = pageNumber;
+        await GetOrderDetailsList();
+    }
 }
+
