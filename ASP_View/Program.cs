@@ -1,5 +1,6 @@
 using ASP_28_12.Domains.EF;
 using ASP_View.Data;
+using ASP_View.Services.OrderDetailsSer;
 using ASP_View.Services.OrderSer;
 using ASP_View.Services.ProductSer;
 using ASP_View.Services.UserSer;
@@ -24,6 +25,7 @@ namespace ASP_View
             builder.Services.AddTransient<IProductApiClient, ProductApiClient>();
             builder.Services.AddTransient<IUserApiClient, UserApiClient>();
             builder.Services.AddTransient<IOrderApiClient, OrderApiClient>();
+            builder.Services.AddTransient<IOrderDetailsApiClient, OrderDetailsApiClient>();
 
             builder.Services.AddMudServices();
             builder.Services.AddDbContext<FlowerDbContext>(options =>
