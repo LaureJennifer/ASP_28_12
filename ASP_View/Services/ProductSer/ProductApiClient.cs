@@ -1,6 +1,6 @@
-﻿using ASP_28_12.Application.Catalog.ProductApp.Request;
+﻿using ASP_28_12.Application.Catalog.ProductApp;
+using ASP_28_12.Application.Catalog.ProductApp.Request;
 using ASP_28_12.Application.ViewModels.Pagination;
-using ASP_28_12.Domains.Entities;
 using Microsoft.AspNetCore.WebUtilities;
 
 namespace ASP_View.Services.ProductSer
@@ -26,7 +26,7 @@ namespace ASP_View.Services.ProductSer
             return result.IsSuccessStatusCode;
         }
 
-        public async Task<PagedList<Product>> GetProduct(ProductPagingRequest productPagingRequest)
+        public async Task<PagedList<ProductDto>> GetProduct(ProductPagingRequest productPagingRequest)
         {
             var queryStringPara = new Dictionary<string, string>
             {
@@ -34,13 +34,13 @@ namespace ASP_View.Services.ProductSer
             };
             if (!string.IsNullOrEmpty(productPagingRequest.ProductName)) queryStringPara.Add("productname", productPagingRequest.ProductName);
             string url = QueryHelpers.AddQueryString("/api/product", queryStringPara);
-            var result = await _httpClient.GetFromJsonAsync<PagedList<Product>>(url);
+            var result = await _httpClient.GetFromJsonAsync<PagedList<ProductDto>>(url);
             return result;
         }
 
-        public async Task<Product> GetProductDetails(string id)
+        public async Task<ProductDto> GetProductDetails(string id)
         {
-            var result = await _httpClient.GetFromJsonAsync<Product>($"/api/product/{id}");
+            var result = await _httpClient.GetFromJsonAsync<ProductDto>($"/api/product/{id}");
             return result;
         }
 

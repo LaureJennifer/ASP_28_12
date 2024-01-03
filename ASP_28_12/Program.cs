@@ -1,7 +1,7 @@
 using ASP_28_12.Domains.EF;
+using ASP_28_12.Infrastructure.Extensions.AutoMapper;
 using ASP_28_12.Repositories;
 using Microsoft.EntityFrameworkCore;
-
 namespace ASP_28_12
 {
     public class Program
@@ -21,6 +21,8 @@ namespace ASP_28_12
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionString"));
             });
+            builder.Services.AddApplication();
+
             builder.Services.AddTransient<IProductRepository, ProductRepository>();
             builder.Services.AddTransient<IUserRepository, UserRepository>();
             builder.Services.AddTransient<IOrderRepository, OrderRepository>();

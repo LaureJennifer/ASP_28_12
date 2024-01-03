@@ -1,5 +1,6 @@
 ﻿@page "/product/details/{productId}"
 
+@using ASP_28_12.Application.Catalog.ProductApp
 @using ASP_28_12.Domains.Entities
 @using ASP_View.Services.ProductSer
 
@@ -47,7 +48,7 @@ else
 @code {
     [Parameter] public string productId { get; set; }
 
-    private Product _productDetailsDto { get; set; }
+    private ProductDto _productDetailsDto { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
