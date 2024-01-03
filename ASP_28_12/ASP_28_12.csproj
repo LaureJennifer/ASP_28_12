@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.13" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.13" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.13">
@@ -24,6 +26,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ASP_28_12.Data\ASP_28_12.Application.csproj" />
     <ProjectReference Include="..\ASP_28_12.Domains\ASP_28_12.Domains.csproj" />
+    <ProjectReference Include="..\ASP_28_12.Infrastructure\ASP_28_12.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,9 +1,7 @@
 ﻿using ASP_28_12.Application.Catalog.OrderDetailsApp.Request;
-using ASP_28_12.Application.Catalog.ProductApp.Request;
 using ASP_28_12.Application.ViewModels.Pagination;
 using ASP_28_12.Domains.Entities;
 using ASP_28_12.Repositories;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ASP_28_12.Controllers
@@ -43,11 +41,11 @@ namespace ASP_28_12.Controllers
                 return BadRequest(ModelState);
 
             var orderDetails = await _orderDetailsRepository.Create(new OrderDetails()
-            {               
+            {
                 ProductID = request.ProductID,
                 OrderID = request.OrderID,
                 Quantity = request.Quantity,
-                 OrderDetailsID = request.OrderDetailsID
+                OrderDetailsID = request.OrderDetailsID
             });
             //return CreatedAtAction(nameof(GetById), new { request.OrderDetailsID }, request);
             return Ok(new OrderDetails()

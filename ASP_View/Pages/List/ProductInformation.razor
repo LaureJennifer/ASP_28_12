@@ -1,4 +1,5 @@
 ﻿@page "/products"
+@using ASP_28_12.Application.Catalog.ProductApp
 @using ASP_28_12.Application.Catalog.ProductApp.Request
 @using ASP_28_12.Application.ViewModels.Pagination
 @using ASP_28_12.Domains.Entities
@@ -91,15 +92,15 @@ else
     [Inject] IProductApiClient productApiClient { set; get; }
     [Inject] NavigationManager _navigationManager { get; set; }
 
-    Product productDelete { get; set; } = new();
+    ProductDto productDelete { get; set; } = new();
 
     MudMessageBox _mboxDelete { get; set; } = null!;
 
     public MetaData metadata = new();
 
-    PagedList<Product> pagingRespone { get; set; } = new();
+    PagedList<ProductDto> pagingRespone { get; set; } = new();
 
-    List<Product> _lstProduct;
+    List<ProductDto> _lstProduct;
 
     ProductPagingRequest productPagingRequest = new();
 

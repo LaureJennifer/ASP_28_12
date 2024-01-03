@@ -1,5 +1,4 @@
-﻿using ASP_28_12.Domains.Entities;
-using ASP_28_12.Domains.Enums;
+﻿using ASP_28_12.Domains.Enums;
 
 namespace ASP_28_12.Application.Catalog.OrderApp.Request
 {

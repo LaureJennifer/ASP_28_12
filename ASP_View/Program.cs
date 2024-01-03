@@ -4,8 +4,6 @@ using ASP_View.Services.OrderDetailsSer;
 using ASP_View.Services.OrderSer;
 using ASP_View.Services.ProductSer;
 using ASP_View.Services.UserSer;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
 using Microsoft.EntityFrameworkCore;
 using MudBlazor.Services;
 

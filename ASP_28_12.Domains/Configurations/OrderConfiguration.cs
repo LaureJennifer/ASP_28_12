@@ -20,7 +20,7 @@ namespace ASP_28_12.Domains.Configurations
 
             builder.Property(o => o.Status).IsRequired(); // Yêu cầu trường Status không được null
             builder.Property(o => o.TotalFee).IsRequired();
-           
+
             builder.HasOne(e => e.User)
                 .WithMany(c => c.Orders)
                 .HasForeignKey(e => e.UserID)

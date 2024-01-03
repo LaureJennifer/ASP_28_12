@@ -1,7 +1,4 @@
-﻿using ASP_28_12.Domains.Entities;
-using ASP_28_12.Domains.Enums;
-
-namespace ASP_28_12.Application.Catalog.OrderDetailsApp.Request
+﻿namespace ASP_28_12.Application.Catalog.OrderDetailsApp.Request
 {
     public class OrderDetailsUpdateRequest
     {

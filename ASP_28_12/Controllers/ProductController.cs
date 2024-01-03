@@ -2,7 +2,9 @@
 using ASP_28_12.Application.ViewModels.Pagination;
 using ASP_28_12.Domains.Entities;
 using ASP_28_12.Repositories;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using ProductDto = ASP_28_12.Application.Catalog.ProductApp.ProductDto;
 
 namespace ASP_28_12.Controllers
 {
@@ -11,10 +13,12 @@ namespace ASP_28_12.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IProductRepository _productRepository;
+        private readonly IMapper _mapper;
 
-        public ProductController(IProductRepository productRepository)
+        public ProductController(IProductRepository productRepository, IMapper mapper)
         {
             _productRepository = productRepository;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -22,18 +26,14 @@ namespace ASP_28_12.Controllers
         {
             var pageList = await _productRepository.GetAllPaging(request);
 
-            var productDtosByName = pageList.Items.Select(x => new Product()
-            {
-                ID = x.ID,
-                Name = x.Name,
-                Price = x.Price,
-                UrlImage = x.UrlImage,
-                CreatedDate = DateTime.Now
-            });
-            return Ok(new PagedList<Product>(productDtosByName.ToList(),
+            var productDtos = _mapper.Map<List<ProductDto>>(pageList.Items);
+
+            var pagedListDto = new PagedList<ProductDto>(productDtos,
                 pageList.MetaData.TotalCount,
                 pageList.MetaData.CurrentPage,
-                pageList.MetaData.PageSize));
+                pageList.MetaData.PageSize);
+
+            return Ok(pagedListDto);
         }
 
         [HttpPost]
@@ -42,83 +42,66 @@ namespace ASP_28_12.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var product = await _productRepository.Create(new Product()
-            {
-                ID = request.ID,
-                CreatedDate = DateTime.Now,
-                Name = request.Name,
-                Price = request.Price,
-                UrlImage = request.UrlImage,
-                
+            var productEntity = _mapper.Map<Product>(request);
+            productEntity.CreatedDate = DateTime.Now;
 
-            });
-            return CreatedAtAction(nameof(GetById), new { request.ID }, request);
+            var createdProduct = await _productRepository.Create(productEntity);
+
+            var productDto = _mapper.Map<ProductDto>(createdProduct);
+
+            return CreatedAtAction(nameof(GetById), new { id = productDto.ID }, productDto);
         }
-        [HttpPut]
-        [Route("{id}")]
 
+        [HttpPut("{id}")]
         public async Task<IActionResult> Update(Guid id, [FromBody] ProductUpdateRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var productUpdate = await _productRepository.GetById(id);
-            if (productUpdate == null)
+
+            var productEntity = await _productRepository.GetById(id);
+            if (productEntity == null)
             {
                 return NotFound($"{id} is not found");
             }
-            productUpdate.Name = request.Name;
-            productUpdate.Price = request.Price;
-            productUpdate.CreatedDate = DateTime.Now;
-            productUpdate.UrlImage = request.UrlImage;
 
-            var result = await _productRepository.Update(productUpdate);
-            return Ok(new Product()
-            {
-                Name = result.Name,
-                CreatedDate = DateTimeOffset.Now,
-                Price = result.Price,
-                ID = result.ID,
-                UrlImage= result.UrlImage,
-            });
+            _mapper.Map(request, productEntity);
+            productEntity.CreatedDate = DateTime.Now;
+
+            var updatedProduct = await _productRepository.Update(productEntity);
+
+            var updatedProductDto = _mapper.Map<ProductDto>(updatedProduct);
+
+            return Ok(updatedProductDto);
         }
-        [HttpGet]
-        [Route("{id}")]
-        public async Task<IActionResult> GetById([FromRoute] Guid id)
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(Guid id)
         {
-            var result = await _productRepository.GetById(id);
-            if (result == null)
+            var productEntity = await _productRepository.GetById(id);
+            if (productEntity == null)
             {
                 return NotFound($"{id} is not found");
             }
-            return Ok(new Product()
-            {
-                Name = result.Name,
-                CreatedDate = result.CreatedDate,
-                Price = result.Price,
-                ID = result.ID,
-                UrlImage= result.UrlImage,
-                
-            });
+
+            var productDto = _mapper.Map<ProductDto>(productEntity);
+
+            return Ok(productDto);
         }
-        [HttpDelete]
-        [Route("{id}")]
-        public async Task<IActionResult> Delete([FromRoute] Guid id)
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
         {
-            var product = await _productRepository.GetById(id);
-            if (product == null) return NotFound($"{id} is not found");
+            var productEntity = await _productRepository.GetById(id);
+            if (productEntity == null)
+                return NotFound($"{id} is not found");
 
-            await _productRepository.Delete(product);
-            return Ok(new Product()
-            {
-                Name = product.Name,
-                CreatedDate = product.CreatedDate,
-                Price = product.Price,
-                ID = product.ID,
-                UrlImage = product.UrlImage,
-            });
+            await _productRepository.Delete(productEntity);
+
+            var deletedProductDto = _mapper.Map<ProductDto>(productEntity);
+
+            return Ok(deletedProductDto);
         }
-
     }
 }
