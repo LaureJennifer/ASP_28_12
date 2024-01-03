@@ -1,4 +1,5 @@
-﻿using ASP_28_12.Application.Catalog.UserApp.Request;
+﻿using ASP_28_12.Application.Catalog.UserApp;
+using ASP_28_12.Application.Catalog.UserApp.Request;
 using ASP_28_12.Application.ViewModels.Pagination;
 using ASP_28_12.Domains.Entities;
 using Microsoft.AspNetCore.WebUtilities;
@@ -25,7 +26,7 @@ namespace ASP_View.Services.UserSer
             return result.IsSuccessStatusCode;
         }
 
-        public async Task<PagedList<User>> GetUser(UserPagingRequest userPagingRequest)
+        public async Task<PagedList<UserDto>> GetUser(UserPagingRequest userPagingRequest)
         {
             var queryStringPara = new Dictionary<string, string>
             {
@@ -33,13 +34,14 @@ namespace ASP_View.Services.UserSer
             };
             if (!string.IsNullOrEmpty(userPagingRequest.UserName)) queryStringPara.Add("username", userPagingRequest.UserName);
             string url = QueryHelpers.AddQueryString("/api/user", queryStringPara);
-            var result = await _httpClient.GetFromJsonAsync<PagedList<User>>(url);
+            var result = await _httpClient.GetFromJsonAsync<PagedList<UserDto>>(url);
             return result;
         }
 
-        public async Task<User> GetUserDetails(string id)
+        public async Task<UserDto> GetUserDetails(string id)
         {
-            var result = await _httpClient.GetFromJsonAsync<User>($"/api/user/{id}");
+           
+            var result = await _httpClient.GetFromJsonAsync<UserDto>($"/api/user/{id}");
             return result;
         }
 

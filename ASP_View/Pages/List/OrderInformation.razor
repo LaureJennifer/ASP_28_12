@@ -1,4 +1,5 @@
 ﻿@page "/orders"
+@using ASP_28_12.Application.Catalog.OrderApp
 @using ASP_28_12.Application.Catalog.OrderApp.Request
 @using ASP_28_12.Application.ViewModels.Pagination
 @using ASP_28_12.Domains.Entities
@@ -94,15 +95,15 @@ else
     [Inject] IOrderApiClient _orderApiClient { set; get; }
     [Inject] NavigationManager _navigationManager { get; set; }
 
-    Order orderDelete { get; set; } = new();
+    OrderDto orderDelete { get; set; } = new();
 
     MudMessageBox _mboxDelete { get; set; } = null!;
 
     public MetaData metadata = new();
 
-    PagedList<Order> pagingRespone { get; set; } = new();
+    PagedList<OrderDto> pagingRespone { get; set; } = new();
 
-    List<Order> _lstOrder;
+    List<OrderDto> _lstOrder;
 
     OrderPagingRequest orderPagingRequest  = new();
 

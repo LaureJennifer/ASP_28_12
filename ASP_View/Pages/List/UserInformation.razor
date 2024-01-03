@@ -1,4 +1,5 @@
 ﻿@page "/users"
+@using ASP_28_12.Application.Catalog.UserApp
 @using ASP_28_12.Application.Catalog.UserApp.Request
 @using ASP_28_12.Application.ViewModels.Pagination
 @using ASP_28_12.Domains.Entities
@@ -96,15 +97,15 @@ else
     [Inject] IUserApiClient _userApiClient { set; get; }
     [Inject] NavigationManager _navigationManager { get; set; }
 
-    User userDelete { get; set; } = new();
+    UserDto userDelete { get; set; } = new();
 
     MudMessageBox _mboxDelete { get; set; } = null!;
 
     public MetaData metadata = new();
 
-    PagedList<User> pagingRespone { get; set; } = new();
+    PagedList<UserDto> pagingRespone { get; set; } = new();
 
-    List<User> _lstUser;
+    List<UserDto> _lstUser;
 
     UserPagingRequest userPagingRequest = new();
 

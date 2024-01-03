@@ -10,6 +10,7 @@ namespace ASP_28_12.Application.Catalog.OrderDetailsApp
         public Guid OrderID { get; set; }
         public OrderDto Order { get; set; }
         public Guid ProductID { get; set; }
+        public string ProductName { get; set; }
         public ProductDto Product { get; set; }
         public int Quantity { get; set; }
 

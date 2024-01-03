@@ -13,6 +13,6 @@ namespace ASP_28_12.Application.Catalog.OrderApp
         public DateTimeOffset OrderDate { get; set; }
         public int TotalFee { get; set; }
         public Status Status { get; set; }
-        public List<OrderDetailsDto> OrderDetails { get; set; }
+        //public List<OrderDetailsDto> OrderDetails { get; set; }
     }
 }

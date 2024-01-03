@@ -1,7 +1,10 @@
-﻿using ASP_28_12.Application.Catalog.UserApp.Request;
+﻿using ASP_28_12.Application.Catalog.ProductApp;
+using ASP_28_12.Application.Catalog.UserApp;
+using ASP_28_12.Application.Catalog.UserApp.Request;
 using ASP_28_12.Application.ViewModels.Pagination;
 using ASP_28_12.Domains.Entities;
 using ASP_28_12.Repositories;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ASP_28_12.Controllers
@@ -11,27 +14,22 @@ namespace ASP_28_12.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
+        private readonly IMapper _mapper;
 
-        public UserController(IUserRepository userRepository)
+        public UserController(IUserRepository userRepository, IMapper mapper)
         {
             _userRepository = userRepository;
+            _mapper = mapper;
+
         }
         [HttpGet]
         public async Task<IActionResult> GetAllPaging([FromQuery] UserPagingRequest request)
         {
             var pageList = await _userRepository.GetAllPaging(request);
 
-            var userDtosByName = pageList.Items.Select(x => new User()
-            {
-                Id = x.Id,
-                UserName = x.UserName,
-                UrlImage = x.UrlImage,
-                Address = x.Address,
-                PhoneNumber = x.PhoneNumber,
-                Email = x.Email,
-                CreatedDate = DateTime.Now
-            });
-            return Ok(new PagedList<User>(userDtosByName.ToList(),
+            var userDtos = _mapper.Map<List<UserDto>>(pageList.Items);
+
+            return Ok(new PagedList<UserDto>(userDtos.ToList(),
                 pageList.MetaData.TotalCount,
                 pageList.MetaData.CurrentPage,
                 pageList.MetaData.PageSize));
@@ -43,17 +41,12 @@ namespace ASP_28_12.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var user = await _userRepository.Create(new User()
-            {
-                Id = request.ID,
-                UserName = request.UserName,
-                UrlImage = request.UrlImage,
-                Address = request.Address,
-                PhoneNumber = request.PhoneNumber,
-                Email = request.Email,
-                CreatedDate = DateTime.Now
+            var UserEntity = _mapper.Map<User>(request);
+            UserEntity.CreatedDate = DateTime.Now;
 
-            });
+            var createdUser = await _userRepository.Create(UserEntity);
+
+            var productDto = _mapper.Map<UserDto>(createdUser);
             return CreatedAtAction(nameof(GetById), new { request.ID }, request);
         }
         [HttpPut]
@@ -65,68 +58,46 @@ namespace ASP_28_12.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var userUpdate = await _userRepository.GetById(id);
-            if (userUpdate == null)
+            var userEntity = await _userRepository.GetById(id);
+            if (userEntity == null)
             {
                 return NotFound($"{id} is not found");
             }
-            userUpdate.UserName = request.UserName;
-            userUpdate.UrlImage = request.UrlImage;
-            userUpdate.Address = request.Address;
-            userUpdate.PhoneNumber = request.PhoneNumber;
-            userUpdate.Email = request.Email;
-            userUpdate.CreatedDate = DateTime.Now;
 
-            var result = await _userRepository.Update(userUpdate);
-            return Ok(new User()
-            {
-                UserName = result.UserName,
-                UrlImage = result.UrlImage,
-                CreatedDate = result.CreatedDate,
-                Address = result.Address,
-                PhoneNumber = result.PhoneNumber,
-                Email = result.Email,
-                Id = result.Id
-            });
+
+            _mapper.Map(request, userEntity);
+            userEntity.CreatedDate = DateTime.Now;
+
+            var updatedUser = await _userRepository.Update(userEntity);
+
+            var updatedUserDto = _mapper.Map<UserDto>(updatedUser);
+
+            return Ok(updatedUserDto);
         }
         [HttpGet]
         [Route("{id}")]
         public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
-            var result = await _userRepository.GetById(id);
-            if (result == null)
+            var userEntity = await _userRepository.GetById(id);
+            if (userEntity == null)
             {
                 return NotFound($"{id} is not found");
             }
-            return Ok(new User()
-            {
-                UserName = result.UserName,
-                UrlImage = result.UrlImage,
-                CreatedDate = result.CreatedDate,
-                Address = result.Address,
-                PhoneNumber = result.PhoneNumber,
-                Email = result.Email,
-                Id = result.Id
-            });
+            var userDto = _mapper.Map<UserDto>(userEntity);
+
+            return Ok(userDto);
         }
         [HttpDelete]
         [Route("{id}")]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
-            var user = await _userRepository.GetById(id);
-            if (user == null) return NotFound($"{id} is not found");
+            var userEntity = await _userRepository.GetById(id);
+            if (userEntity == null) return NotFound($"{id} is not found");
 
-            await _userRepository.Delete(user);
-            return Ok(new User()
-            {
-                UserName = user.UserName,
-                UrlImage = user.UrlImage,
-                CreatedDate = user.CreatedDate,
-                Address = user.Address,
-                PhoneNumber = user.PhoneNumber,
-                Email = user.Email,
-                Id = user.Id
-            });
+            await _userRepository.Delete(userEntity);
+            var deletedUserDto = _mapper.Map<UserDto>(userEntity);
+
+            return Ok(deletedUserDto);
         }
     }
 }
