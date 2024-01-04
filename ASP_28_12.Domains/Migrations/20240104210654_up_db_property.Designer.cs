@@ -4,6 +4,7 @@ using ASP_28_12.Domains.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ASP_28_12.Domains.Migrations
 {
     [DbContext(typeof(FlowerDbContext))]
-    partial class FlowerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240104210654_up_db_property")]
+    partial class up_db_property
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

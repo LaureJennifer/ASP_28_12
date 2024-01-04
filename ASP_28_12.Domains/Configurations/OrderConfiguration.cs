@@ -12,10 +12,7 @@ namespace ASP_28_12.Domains.Configurations
 
             builder.HasKey(o => o.ID); // Đặt trường ID làm khóa chính
             builder.Property(c => c.ID).ValueGeneratedOnAdd();
-
-
-            builder.Property(o => o.UserID).IsRequired();
-
+           
             builder.Property(o => o.OrderDate).HasDefaultValue(DateTimeOffset.UtcNow).IsRequired();
 
             builder.Property(o => o.Status).IsRequired(); // Yêu cầu trường Status không được null

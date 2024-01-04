@@ -2,7 +2,9 @@
 using ASP_28_12.Application.Catalog.OrderApp;
 using ASP_28_12.Application.Catalog.OrderApp.Request;
 using ASP_28_12.Application.Catalog.UserApp;
+using ASP_28_12.Application.Catalog.UserApp.Request;
 using ASP_28_12.Application.ViewModels.Pagination;
+using ASP_28_12.Domains.EF;
 using ASP_28_12.Domains.Entities;
 using ASP_28_12.Repositories;
 using AutoMapper;
@@ -16,13 +18,14 @@ namespace ASP_28_12.Controllers
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IMapper _mapper;
+        private readonly IUserRepository _userRepository;
 
-
-        public OrderController(IOrderRepository orderRepository, IMapper mapper)
+        public OrderController(IOrderRepository orderRepository, IUserRepository userRepository,IMapper mapper)
         {
             _orderRepository = orderRepository;
+            _userRepository = userRepository;
             _mapper = mapper;
-
+            
         }
         [HttpGet]
         public async Task<IActionResult> GetAllPaging([FromQuery] OrderPagingRequest request)
@@ -30,7 +33,11 @@ namespace ASP_28_12.Controllers
             var pageList = await _orderRepository.GetAllPaging(request);
             var orderDtos = _mapper.Map<List<OrderDto>>(pageList.Items);
 
-
+            foreach (var orderDto in orderDtos)
+            {
+                 //orderDto.UserName = orderDto.User?.UserName;
+                orderDto.UserName = _userRepository.GetById(orderDto.UserID).Result.UserName;
+            }
             return Ok(new PagedList<OrderDto>(orderDtos.ToList(),
                 pageList.MetaData.TotalCount,
                 pageList.MetaData.CurrentPage,
@@ -41,13 +48,14 @@ namespace ASP_28_12.Controllers
         public async Task<IActionResult> Create([FromBody] OrderCreateRequest request)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequest(ModelState);  
 
             var orderEntity = _mapper.Map<Order>(request);
 
-            var createdUser = await _orderRepository.Create(orderEntity);
+            var createdOrder = await _orderRepository.Create(orderEntity);
 
-            var productDto = _mapper.Map<OrderDto>(createdUser); return CreatedAtAction(nameof(GetById), new { request.ID }, request);
+            var orderDto = _mapper.Map<OrderDto>(createdOrder); 
+            return CreatedAtAction(nameof(GetById), new { request.ID }, request);
         }
         [HttpPut]
         [Route("{id}")]
@@ -79,12 +87,14 @@ namespace ASP_28_12.Controllers
         public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
             var result = await _orderRepository.GetById(id);
+
             if (result == null)
             {
                 return NotFound($"{id} is not found");
             }
-            var orderDto = _mapper.Map<OrderDto>(result);
 
+            var orderDto = _mapper.Map<OrderDto>(result);
+            orderDto.UserName = _userRepository.GetById(orderDto.UserID).Result.UserName;
             return Ok(orderDto);
         }
         [HttpDelete]
@@ -95,7 +105,7 @@ namespace ASP_28_12.Controllers
             if (orderEntity == null) return NotFound($"{id} is not found");
 
             await _orderRepository.Delete(orderEntity);
-            var deletedOrderDto = _mapper.Map<UserDto>(orderEntity);
+            var deletedOrderDto = _mapper.Map<OrderDto>(orderEntity);
 
             return Ok(deletedOrderDto);
         }

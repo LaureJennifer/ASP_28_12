@@ -1,4 +1,5 @@
 ﻿@page "/orderdetailsoforder"
+@using ASP_28_12.Application.Catalog.OrderDetailsApp
 @using ASP_28_12.Application.Catalog.OrderDetailsApp.Request
 @using ASP_28_12.Application.ViewModels.Pagination
 @using ASP_28_12.Domains.Entities
@@ -37,6 +38,9 @@ else
             <MudTh>STT</MudTh>
             <MudTh class="text-center">Order ID</MudTh>
             <MudTh class="text-center">Product ID</MudTh>
+            <MudTh class="text-center">Tên sản phẩm</MudTh>
+            <MudTh class="text-center">Đơn giá</MudTh>
+
             <MudTh class="text-center">Quantity</MudTh>
             <MudTh class="text-center">Hành động</MudTh>
 
@@ -45,6 +49,9 @@ else
             <MudTd DataLabel="">@(_lstOrderDetails.IndexOf(context) + 1)</MudTd>
             <MudTd DataLabel="" Class="text-center">@context.OrderID</MudTd>
                 <MudTd DataLabel="" Class="text-center">@context.ProductID</MudTd>
+                <MudTd DataLabel="" Class="text-center">@context.ProductName</MudTd>
+                <MudTd DataLabel="" Class="text-center">@context.Price</MudTd>
+
                 <MudTd DataLabel="" Class="text-center">@context.Quantity</MudTd>
                 <MudTd DataLabel="">
                     <MudGrid>
@@ -92,15 +99,15 @@ else
     [Inject] IOrderDetailsApiClient _orderDetailsApiClient { set; get; }
     [Inject] NavigationManager _navigationManager { get; set; }
 
-    OrderDetails orderDetailsDelete { get; set; } = new();
+    OrderDetailsDto orderDetailsDelete { get; set; } = new();
 
     MudMessageBox _mboxDelete { get; set; } = null!;
 
     public MetaData metadata = new();
 
-    PagedList<OrderDetails> pagingRespone { get; set; } = new();
+    PagedList<OrderDetailsDto> pagingRespone { get; set; } = new();
 
-    List<OrderDetails> _lstOrderDetails;
+    List<OrderDetailsDto> _lstOrderDetails;
 
     OrderDetailsPagingRequest orderDetailsPagingRequest = new();
 

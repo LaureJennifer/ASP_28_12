@@ -13,9 +13,6 @@ namespace ASP_28_12.Domains.Configurations
             builder.HasKey(e => e.OrderDetailsID);
             builder.Property(e => e.OrderDetailsID).ValueGeneratedOnAdd();
 
-            builder.Property(e => e.OrderID).IsRequired();
-            builder.Property(e => e.ProductID).IsRequired();
-
             builder.Property(od => od.Quantity).IsRequired(); // Yêu cầu trường Quantity không được null
 
             builder.HasOne(e => e.Order)

@@ -35,7 +35,7 @@ else
     <MudTable Items="@_lstOrder" Hover="true" Striped="true" FixedHeader="true">
         <HeaderContent>
             <MudTh>STT</MudTh>
-            <MudTh class="text-center">User ID</MudTh>
+            <MudTh class="text-center">Tên Người dùng</MudTh>
             <MudTh class="text-center">Ngày đặt</MudTh>
             <MudTh class="text-center">Tổng phí</MudTh>
             <MudTh class="text-center">Trạng thái</MudTh>
@@ -44,7 +44,8 @@ else
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="">@(_lstOrder.IndexOf(context) + 1)</MudTd>
-            <MudTd DataLabel="" Class="text-center">@context.UserID</MudTd>
+                <MudTd DataLabel="" Class="text-center">@context.UserName</MudTd>
+
                 <MudTd DataLabel="" Class="text-center">@context.OrderDate.ToString("hh:mm tt dd/MM/yyyy")</MudTd>
                 <MudTd DataLabel="" Class="text-center">@context.TotalFee</MudTd>
                 <MudTd DataLabel="" Class="text-center">@context.Status</MudTd>
