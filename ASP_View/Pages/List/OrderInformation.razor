@@ -1,4 +1,5 @@
 ﻿@page "/orders"
+@using ASP_28_12.Application.Catalog.OrderApp
 @using ASP_28_12.Application.Catalog.OrderApp.Request
 @using ASP_28_12.Application.ViewModels.Pagination
 @using ASP_28_12.Domains.Entities
@@ -34,7 +35,7 @@ else
     <MudTable Items="@_lstOrder" Hover="true" Striped="true" FixedHeader="true">
         <HeaderContent>
             <MudTh>STT</MudTh>
-            <MudTh class="text-center">User ID</MudTh>
+            <MudTh class="text-center">Tên Người dùng</MudTh>
             <MudTh class="text-center">Ngày đặt</MudTh>
             <MudTh class="text-center">Tổng phí</MudTh>
             <MudTh class="text-center">Trạng thái</MudTh>
@@ -43,7 +44,8 @@ else
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="">@(_lstOrder.IndexOf(context) + 1)</MudTd>
-            <MudTd DataLabel="" Class="text-center">@context.UserID</MudTd>
+                <MudTd DataLabel="" Class="text-center">@context.UserName</MudTd>
+
                 <MudTd DataLabel="" Class="text-center">@context.OrderDate.ToString("hh:mm tt dd/MM/yyyy")</MudTd>
                 <MudTd DataLabel="" Class="text-center">@context.TotalFee</MudTd>
                 <MudTd DataLabel="" Class="text-center">@context.Status</MudTd>
@@ -94,15 +96,15 @@ else
     [Inject] IOrderApiClient _orderApiClient { set; get; }
     [Inject] NavigationManager _navigationManager { get; set; }
 
-    Order orderDelete { get; set; } = new();
+    OrderDto orderDelete { get; set; } = new();
 
     MudMessageBox _mboxDelete { get; set; } = null!;
 
     public MetaData metadata = new();
 
-    PagedList<Order> pagingRespone { get; set; } = new();
+    PagedList<OrderDto> pagingRespone { get; set; } = new();
 
-    List<Order> _lstOrder;
+    List<OrderDto> _lstOrder;
 
     OrderPagingRequest orderPagingRequest  = new();
 

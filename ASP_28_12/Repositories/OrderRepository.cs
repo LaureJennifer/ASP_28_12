@@ -31,7 +31,7 @@ namespace ASP_28_12.Repositories
 
         public async Task<PagedList<Order>> GetAllPaging(OrderPagingRequest orderPagingRequest)
         {
-            var query = _db.Orders.Include(x => x.OrderDetails).AsQueryable();
+            var query = _db.Orders.Include(x => x.OrderDetails).Include(y=>y.User).AsQueryable();
 
             if (orderPagingRequest.UserID != null)
             {
@@ -46,6 +46,7 @@ namespace ASP_28_12.Repositories
 
         public async Task<Order> GetById(Guid id)
         {
+            // return await _db.Orders.Include(y => y.User).FirstAsync(x=>x.ID==id);
             return await _db.Orders.FindAsync(id);
         }
 

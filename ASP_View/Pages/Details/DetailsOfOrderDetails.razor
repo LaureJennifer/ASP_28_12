@@ -1,4 +1,5 @@
 ﻿@page "/orderdetails/details/{orderDetailsId}"
+@using ASP_28_12.Application.Catalog.OrderDetailsApp
 @using ASP_View.Services.OrderDetailsSer
 
 <MudText Color="Color.Primary" Typo="Typo.h4" Class="mb-5">Thông tin chi tiết của chi tiết đơn hàng</MudText>
@@ -19,13 +20,21 @@ else
                         <MudTd>Mã chi tiết đơn hàng</MudTd>
                         <MudTd>@_orderDetailsForOrderDto.OrderDetailsID</MudTd>
                     </MudTr>
-                        <MudTr>
+                        @* <MudTr>
                     <MudTd>Mã đơn hàng</MudTd>
                     <MudTd>@_orderDetailsForOrderDto.OrderID</MudTd>
+                    </MudTr> *@
+                    <MudTr>
+                        <MudTd>Mã sản phẩm</MudTd>
+                        <MudTd>@_orderDetailsForOrderDto.ProductID</MudTd>
                     </MudTr>
                     <MudTr>
-                        <MudTd>Mã người dùng</MudTd>
-                        <MudTd>@_orderDetailsForOrderDto.ProductID</MudTd>
+                        <MudTd>Tên sản phẩm</MudTd>
+                        <MudTd>@_orderDetailsForOrderDto.ProductName</MudTd>
+                    </MudTr>
+                    <MudTr>
+                        <MudTd>Đơn giá</MudTd>
+                        <MudTd>@_orderDetailsForOrderDto.Price</MudTd>
                     </MudTr>
                     <MudTr>
                         <MudTd>Số lượng</MudTd>
@@ -41,11 +50,12 @@ else
 @code {
     [Parameter] public string orderDetailsId { get; set; }
 
-    private ASP_28_12.Domains.Entities.OrderDetails _orderDetailsForOrderDto { get; set; }
+    private OrderDetailsDto _orderDetailsForOrderDto { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         _orderDetailsForOrderDto = await _orderDetailsApiClient.GetDetails(orderDetailsId);
     }
+
 }
 

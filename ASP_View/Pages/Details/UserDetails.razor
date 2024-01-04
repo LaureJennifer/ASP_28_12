@@ -1,5 +1,6 @@
 ﻿
 @page "/user/details/{userId}"
+@using ASP_28_12.Application.Catalog.UserApp
 @using ASP_28_12.Domains.Entities
 @using ASP_View.Services.UserSer
 <MudText Color="Color.Primary" Typo="Typo.h4">Thông tin chi tiết của người dùng</MudText>
@@ -54,7 +55,7 @@ else
 @code {
     [Parameter] public string userId { get; set; }
 
-    private User _userDetailsDto { get; set; }
+    private UserDto _userDetailsDto { get; set; }
 
     protected override async Task OnInitializedAsync()
     {

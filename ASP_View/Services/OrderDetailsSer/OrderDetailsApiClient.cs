@@ -1,4 +1,5 @@
-﻿using ASP_28_12.Application.Catalog.OrderDetailsApp.Request;
+﻿using ASP_28_12.Application.Catalog.OrderDetailsApp;
+using ASP_28_12.Application.Catalog.OrderDetailsApp.Request;
 using ASP_28_12.Application.ViewModels.Pagination;
 using ASP_28_12.Domains.Entities;
 using Microsoft.AspNetCore.WebUtilities;
@@ -25,13 +26,13 @@ namespace ASP_View.Services.OrderDetailsSer
             return result.IsSuccessStatusCode;
         }
 
-        public async Task<OrderDetails> GetDetails(string id)
+        public async Task<OrderDetailsDto> GetDetails(string id)
         {
-            var result = await _httpClient.GetFromJsonAsync<OrderDetails>($"/api/orderdetails/{id}");
+            var result = await _httpClient.GetFromJsonAsync<OrderDetailsDto>($"/api/orderdetails/{id}");
             return result;
         }
 
-        public async Task<PagedList<OrderDetails>> GetOrderDetails(OrderDetailsPagingRequest orderDetailsPagingRequest)
+        public async Task<PagedList<OrderDetailsDto>> GetOrderDetails(OrderDetailsPagingRequest orderDetailsPagingRequest)
         {
             var queryStringPara = new Dictionary<string, string>
             {
@@ -44,7 +45,7 @@ namespace ASP_View.Services.OrderDetailsSer
             if (!string.IsNullOrEmpty(querySearchOrderID)) queryStringPara.Add("orderid", orderDetailsPagingRequest.OrderID.ToString());
 
             string url = QueryHelpers.AddQueryString("/api/orderdetails", queryStringPara);
-            var result = await _httpClient.GetFromJsonAsync<PagedList<OrderDetails>>(url);
+            var result = await _httpClient.GetFromJsonAsync<PagedList<OrderDetailsDto>>(url);
             return result;
         }
 
