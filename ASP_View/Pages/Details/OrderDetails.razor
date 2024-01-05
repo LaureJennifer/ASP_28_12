@@ -6,8 +6,16 @@
 @using ASP_28_12.Domains.Entities
 @using ASP_View.Services.OrderDetailsSer
 @using ASP_View.Services.OrderSer
+<MudGrid>
+    <MudItem xs="10" md="10">
+        <MudText Color="Color.Primary" Typo="Typo.h4" Class="mb-5">Thông tin chi tiết của đơn hàng</MudText>
 
-<MudText Color="Color.Primary" Typo="Typo.h4">Thông tin chi tiết của người dùng</MudText>
+    </MudItem>
+    <MudItem xs="2" md="2">
+        <MudButton Color="Color.Primary" Class="mt-1" Variant="Variant.Filled" OnClick="()=>NavigateToOrderDetailsCreate()">Thêm mới</MudButton>
+
+    </MudItem>
+</MudGrid>
 
 @inject IOrderApiClient _orderApiClient;
 @inject IOrderDetailsApiClient _orderDetailsApiClient;
@@ -20,7 +28,7 @@
 else
 {
     <MudGrid>
-        <MudItem xs="6" md="6">
+        <MudItem xs="4" md="4">
             <MudSimpleTable>
                 <MudTr>
                     <MudTd>Mã đơn hàng</MudTd>
@@ -50,53 +58,66 @@ else
                 </MudSimpleTable>
 
             </MudItem>
+            <MudItem xs="8" md="8" >
+
+                <MudTable Items="@_lstOrderDetailsSelected" Hover="true" Striped="true" FixedHeader="true">
+                    <HeaderContent>
+                        <MudTh>STT</MudTh>
+                        <MudTh class="text-center">Product ID</MudTh>
+                        <MudTh class="text-center">Tên sản phẩm</MudTh>
+                        <MudTh class="text-center">Đơn giá</MudTh>
+
+                        <MudTh class="text-center">Quantity</MudTh>
+                        <MudTh class="text-center">Hành động</MudTh>
+
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd DataLabel="">@(_lstOrderDetailsSelected.IndexOf(context) + 1)</MudTd>
+                        <MudTd DataLabel="" Class="text-center">@context.ProductID</MudTd>
+                        <MudTd DataLabel="" Class="text-center">@context.ProductName</MudTd>
+                        <MudTd DataLabel="" Class="text-center">@context.Price</MudTd>
+
+                        <MudTd DataLabel="" Class="text-center">@context.Quantity</MudTd>
+                        <MudTd DataLabel="">
+                            <MudGrid>
+                                <MudItem xs="4" md="4" />
+                                <MudItem xs="4" md="4">
+                                    <MudGrid>
+
+                                        <MudItem xs="4" md="4">
+                                            <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Success" OnClick="()=>NavigateToOrderDetailsUpdate(context.OrderDetailsID.ToString())"></MudIconButton>
+                                        </MudItem>
+                                        <MudItem xs="4" md="4">
+                                            <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="()=>OnDeleteClicked(context.OrderDetailsID.ToString())"></MudIconButton>
+                                        </MudItem>
+                                    </MudGrid>
+                                </MudItem>
+                                <MudItem xs="4" md="4" />
+                            </MudGrid>
+
+                        </MudTd>
+                    </RowTemplate>
+                    <PagerContent>
+                        <MudGrid Class="mb-3">
+                            <MudItem xs="12" Class="d-flex justify-center mt-3">
+                                <MudPagination BoundaryCount="1" ShowPreviousButton="true" ShowNextButton="true" Count="(pagingRespone.MetaData.HasNext ? (pagingRespone.MetaData.CurrentPage + 1) :pagingRespone.MetaData.CurrentPage)" SelectedChanged="OnSelectPagination" />
+                            </MudItem>
+                        </MudGrid>
+                    </PagerContent>
+                </MudTable>
+            </MudItem>
         </MudGrid>
 
-    <MudTable Items="@_lstOrderDetailsSelected" Hover="true" Striped="true" FixedHeader="true">
-        <HeaderContent>
-            <MudTh>STT</MudTh>
-            <MudTh class="text-center">Product ID</MudTh>
-            <MudTh class="text-center">Tên sản phẩm</MudTh>
-            <MudTh class="text-center">Đơn giá</MudTh>
-
-            <MudTh class="text-center">Quantity</MudTh>
-            <MudTh class="text-center">Hành động</MudTh>
-
-        </HeaderContent>
-        <RowTemplate>
-            <MudTd DataLabel="">@(_lstOrderDetailsSelected.IndexOf(context) + 1)</MudTd>
-                <MudTd DataLabel="" Class="text-center">@context.ProductID</MudTd>
-                <MudTd DataLabel="" Class="text-center">@context.ProductName</MudTd>
-                <MudTd DataLabel="" Class="text-center">@context.Price</MudTd>
-
-                <MudTd DataLabel="" Class="text-center">@context.Quantity</MudTd>
-                <MudTd DataLabel="">
-                    <MudGrid>
-                        <MudItem xs="4" md="4" />
-                        <MudItem xs="4" md="4">
-                            <MudGrid>
-                                
-                                <MudItem xs="4" md="4">
-                                    <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Success" OnClick="()=>NavigateToOrderDetailsUpdate(context.OrderDetailsID.ToString())"></MudIconButton>
-                                </MudItem>
-                                <MudItem xs="4" md="4">
-                                    <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="()=>OnDeleteClicked(context.OrderDetailsID.ToString())"></MudIconButton>
-                                </MudItem>
-                            </MudGrid>
-                        </MudItem>
-                        <MudItem xs="4" md="4" />
-                    </MudGrid>
-
-                </MudTd>
-            </RowTemplate>
-            <PagerContent>
-                <MudGrid Class="mb-3">
-                    <MudItem xs="12" Class="d-flex justify-center mt-3">
-                        <MudPagination BoundaryCount="1" ShowPreviousButton="true" ShowNextButton="true" Count="(pagingRespone.MetaData.HasNext ? (pagingRespone.MetaData.CurrentPage + 1) :pagingRespone.MetaData.CurrentPage)" SelectedChanged="OnSelectPagination" />
-                    </MudItem>
-                </MudGrid>
-            </PagerContent>
-        </MudTable>
+    <MudMessageBox @ref="_mboxDelete" Title="Xác nhận" CancelText="Hủy">
+        <MessageContent>
+            Xác nhận xóa sản phẩm khỏi danh sách!
+        </MessageContent>
+        <YesButton>
+            <MudButton Color="Color.Primary" OnClick="OnConfirmDelete">
+                Xác nhận
+            </MudButton>
+        </YesButton>
+    </MudMessageBox>
 }
 
 @code {

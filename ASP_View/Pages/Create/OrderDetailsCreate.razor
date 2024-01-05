@@ -30,7 +30,7 @@
         if (result)
         {
             _snackbar.Add("Thêm thành công", Severity.Success);
-            _navigate.NavigateTo("/orderdetailsoforder");
+            _navigate.NavigateTo($"/order/details/{orderDetailsCreateRequest.OrderID}");
         }
         else
             _snackbar.Add("Thêm thất bại", Severity.Error);

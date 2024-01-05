@@ -43,7 +43,7 @@
         if (result)
         {
             _snackbar.Add("Cập nhật thành công", Severity.Success);
-            _navigate.NavigateTo("/orderdetailsoforder");
+            _navigate.NavigateTo($"/order/details/{orderDetailsUpdateRequest.OrderID}");
         }
         else
             _snackbar.Add("Cập nhật thất bại", Severity.Success);
