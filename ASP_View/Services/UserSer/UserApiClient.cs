@@ -1,7 +1,6 @@
 ﻿using ASP_28_12.Application.Catalog.UserApp;
 using ASP_28_12.Application.Catalog.UserApp.Request;
 using ASP_28_12.Application.ViewModels.Pagination;
-using ASP_28_12.Domains.Entities;
 using Microsoft.AspNetCore.WebUtilities;
 
 namespace ASP_View.Services.UserSer
@@ -40,7 +39,7 @@ namespace ASP_View.Services.UserSer
 
         public async Task<UserDto> GetUserDetails(string id)
         {
-           
+
             var result = await _httpClient.GetFromJsonAsync<UserDto>($"/api/user/{id}");
             return result;
         }
