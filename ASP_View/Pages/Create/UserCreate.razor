@@ -1,4 +1,5 @@
 ﻿@page "/usercreate"
+@using ASP_28_12.Application.Catalog
 @using ASP_28_12.Application.Catalog.UserApp.Request
 @using ASP_View.Services.UserSer
 
@@ -12,14 +13,21 @@
     <MudCard>
         <MudCardContent>
             <MudTextField Label="Tên người dùng" @bind-Value="userCreateRequest.UserName" />
-            <MudTextField Label="Hình ảnh" @bind-Value="userCreateRequest.UrlImage" @oninput="ImageSelected" />
+            
             <MudTextField Label="Email" @bind-Value="userCreateRequest.Email" />
             <MudTextField Label="Địa chỉ" @bind-Value="userCreateRequest.Address" />
             <MudTextField Label="Số điện thoại" @bind-Value="userCreateRequest.PhoneNumber" />
-            @if (!string.IsNullOrEmpty(linkImg))
-            {
-                <MudImage Src="@userCreateRequest.UrlImage" Width="150"></MudImage>
-            }
+            <MudGrid>
+                <MudItem xs="12" md="12" sm="12">
+                    <InputFile OnChange="HandleFileSelect" accept=".jpg,.jpeg,.png" />
+                </MudItem>
+                <MudItem xs="12" md="6" sm="6">
+                    @if (selectedImage != null)
+                    {
+                        <MudImage Width="600" Height="300" Src="@imageUrl" Alt="" Elevation="25" Class="rounded-lg" />
+                    }
+                </MudItem>
+            </MudGrid>
         </MudCardContent>
         <MudCardActions>
             <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Success" Class="ml-auto">Create</MudButton>
@@ -29,19 +37,13 @@
 
 @code {
     UserCreateRequest userCreateRequest = new();
-    string linkImg = "";
-
-    private void ImageSelected(ChangeEventArgs e)
-    {
-        string value = e.Value.ToString();
-
-        userCreateRequest.UrlImage = value;
-
-    }
-
+    string? imageUrl = "";
+    ImageHandle imageHandle = new();
+    private IBrowserFile? selectedImage;
     private async Task OnValidSubmit(EditContext context)
     {
         userCreateRequest.ID = Guid.NewGuid();
+        userCreateRequest.UrlImage = imageUrl;
         var result = await _userApiClient.CreateUser(userCreateRequest);
         if (result)
         {
@@ -50,5 +52,10 @@
         }
         StateHasChanged();
     }
+    private async Task HandleFileSelect(InputFileChangeEventArgs e)
+    {
+        selectedImage = e.File;
+        imageUrl = @"\image\User\" + await imageHandle.AddImage(selectedImage, "User");
 
+    }
 }

@@ -1,5 +1,4 @@
-﻿using ASP_28_12.Application.Catalog.OrderApp;
-using ASP_28_12.Application.Catalog.OrderDetailsApp;
+﻿using ASP_28_12.Application.Catalog.OrderDetailsApp;
 using ASP_28_12.Application.Catalog.OrderDetailsApp.Request;
 using ASP_28_12.Application.ViewModels.Pagination;
 using ASP_28_12.Domains.Entities;
@@ -59,7 +58,7 @@ namespace ASP_28_12.Controllers
             orderDetailsDto.Price = _productRepository.GetById(orderDetailsDto.ProductID).Result.Price;
             return Ok(orderDetailsDto);
             //return CreatedAtAction(nameof(GetById), new { request.OrderDetailsID }, request);
-           
+
         }
 
         [HttpPut]

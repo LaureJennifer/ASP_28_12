@@ -1,10 +1,7 @@
 ﻿
 using ASP_28_12.Application.Catalog.OrderApp;
 using ASP_28_12.Application.Catalog.OrderApp.Request;
-using ASP_28_12.Application.Catalog.UserApp;
-using ASP_28_12.Application.Catalog.UserApp.Request;
 using ASP_28_12.Application.ViewModels.Pagination;
-using ASP_28_12.Domains.EF;
 using ASP_28_12.Domains.Entities;
 using ASP_28_12.Repositories;
 using AutoMapper;
@@ -20,12 +17,12 @@ namespace ASP_28_12.Controllers
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
 
-        public OrderController(IOrderRepository orderRepository, IUserRepository userRepository,IMapper mapper)
+        public OrderController(IOrderRepository orderRepository, IUserRepository userRepository, IMapper mapper)
         {
             _orderRepository = orderRepository;
             _userRepository = userRepository;
             _mapper = mapper;
-            
+
         }
         [HttpGet]
         public async Task<IActionResult> GetAllPaging([FromQuery] OrderPagingRequest request)
@@ -35,7 +32,7 @@ namespace ASP_28_12.Controllers
 
             foreach (var orderDto in orderDtos)
             {
-                 //orderDto.UserName = orderDto.User?.UserName;
+                //orderDto.UserName = orderDto.User?.UserName;
                 orderDto.UserName = _userRepository.GetById(orderDto.UserID).Result.UserName;
             }
             return Ok(new PagedList<OrderDto>(orderDtos.ToList(),
@@ -48,13 +45,13 @@ namespace ASP_28_12.Controllers
         public async Task<IActionResult> Create([FromBody] OrderCreateRequest request)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);  
+                return BadRequest(ModelState);
 
             var orderEntity = _mapper.Map<Order>(request);
 
             var createdOrder = await _orderRepository.Create(orderEntity);
 
-            var orderDto = _mapper.Map<OrderDto>(createdOrder); 
+            var orderDto = _mapper.Map<OrderDto>(createdOrder);
             return CreatedAtAction(nameof(GetById), new { request.ID }, request);
         }
         [HttpPut]
@@ -74,7 +71,7 @@ namespace ASP_28_12.Controllers
 
 
             _mapper.Map(request, orderEntity);
-           
+
 
             var updatedOrder = await _orderRepository.Update(orderEntity);
 

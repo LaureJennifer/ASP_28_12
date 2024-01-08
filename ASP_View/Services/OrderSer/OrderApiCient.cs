@@ -1,7 +1,6 @@
 ﻿using ASP_28_12.Application.Catalog.OrderApp;
 using ASP_28_12.Application.Catalog.OrderApp.Request;
 using ASP_28_12.Application.ViewModels.Pagination;
-using ASP_28_12.Domains.Entities;
 using Microsoft.AspNetCore.WebUtilities;
 
 namespace ASP_View.Services.OrderSer

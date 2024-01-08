@@ -15,4 +15,8 @@
     <ProjectReference Include="..\ASP_28_12.Domains\ASP_28_12.Domains.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\image\User\" />
+  </ItemGroup>
+
 </Project>

@@ -1,7 +1,9 @@
 ﻿@page "/productcreate"
+@using ASP_28_12.Application.Catalog
 @using ASP_28_12.Application.Catalog.ProductApp.Request
 @using ASP_View.Services.ProductSer
-
+@using MudBlazor.Extensions
+@using MudBlazor.Utilities
 <MudText Color="Color.Primary" Typo="Typo.h4">Tạo sản phẩm mới</MudText>
 
 @inject ISnackbar _snackbar;
@@ -13,13 +15,19 @@
         <MudCardContent>
             <MudTextField Label="Tên sản phẩm" @bind-Value="productCreateRequest.Name" />
             <MudTextField Label="Đơn giá" @bind-Value="productCreateRequest.Price" />
-            <MudTextField Label="Ảnh" @bind-Value="productCreateRequest.UrlImage" @oninput="ImageSelected"/>
-                @if (!string.IsNullOrEmpty(linkImg))
-                {
-                <MudImage Src="@productCreateRequest.UrlImage" Width="150"></MudImage>
-                }
+            <MudGrid>
+                <MudItem xs="12" md="12" sm="12">
+                    <InputFile OnChange="HandleFileSelect" accept=".jpg,.jpeg,.png" />
+                </MudItem>
+                <MudItem xs="12" md="6" sm="6">
+                    @if (selectedImage != null)
+                    {
+                        <MudImage Width="600" Height="300" Src="@imageUrl" Alt="" Elevation="25" Class="rounded-lg" />
+                    }
+                </MudItem>
+            </MudGrid>
            
-            
+
         </MudCardContent>
         <MudCardActions>
             <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Success" Class="ml-auto">Create</MudButton>
@@ -29,19 +37,14 @@
 
 @code {
     ProductCreateRequest productCreateRequest = new();
-    string linkImg = "";
-   
-    private void ImageSelected(ChangeEventArgs e)
-    {
-        string value = e.Value.ToString();
-       
-            productCreateRequest.UrlImage = value;
-        
-    }
+    string? imageUrl = "";
+    ImageHandle imageHandle = new();
 
+    private IBrowserFile? selectedImage;
     private async Task OnValidSubmit(EditContext context)
     {
         productCreateRequest.ID = Guid.NewGuid();
+        productCreateRequest.UrlImage = imageUrl;
         var result = await _productApiClient.CreateProduct(productCreateRequest);
         if (result)
         {
@@ -49,6 +52,12 @@
             _navigate.NavigateTo("/products");
         }
         StateHasChanged();
+    }
+    private async Task HandleFileSelect(InputFileChangeEventArgs e)
+    {
+         selectedImage = e.File;
+        imageUrl = @"\image\Product\" + await imageHandle.AddImage(selectedImage, "Product");
+
     }
 
 }
