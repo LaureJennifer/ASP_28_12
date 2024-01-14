@@ -1,0 +1,48 @@
+﻿@page "/login"
+@using System.ComponentModel.DataAnnotations
+@using ASP_28_12.Application.Login
+@using ASP_View.Services.Login
+
+@inject IAuthApiClient _authApiClient;
+@inject NavigationManager _navigate;
+<EditForm Model="@_loginRequest" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <MudGrid>
+        <MudItem xs="12" sm="6">
+            <MudCard>
+                <MudCardContent>
+                    <MudTextField Label="User name" HelperText="Max. 10 characters"
+                                  @bind-Value="_loginRequest.UserName" For="@(() => _loginRequest.UserName)" />
+                    
+                    <MudTextField Label="Password" HelperText="Choose a strong password" Class="mt-3"
+                                  @bind-Value="_loginRequest.Password" For="@(() => _loginRequest.Password)" InputType="InputType.Password" />
+           </MudCardContent>
+                <MudCardActions>
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Login</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+</EditForm>
+@code {
+    LoginRequest _loginRequest = new LoginRequest();
+    string? error;
+    bool _showError = false;
+    MudCheckBox<bool> _checkchange = new();
+
+    private async Task OnValidSubmit(EditContext context)
+    {
+
+        var result = await _authApiClient.Login(_loginRequest);
+        if (result.Successful)
+        {
+            _navigate.NavigateTo("/products");
+        }
+        else
+        {
+            _showError = true;
+            error = result.Error;
+        }
+    }
+
+}

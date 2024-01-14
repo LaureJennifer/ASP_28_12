@@ -11,7 +11,17 @@
 
     <main>
         <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+            
+            <AuthorizeView>
+                <Authorized>
+                    hello @context.User.Identity.Name 
+                    <MudLink Href="/logout">Log out</MudLink>
+                </Authorized>
+                <NotAuthorized>
+                    <MudLink Href="/login">Login</MudLink>
+                </NotAuthorized>
+            </AuthorizeView>
+            
         </div>
 
         <article class="content px-4">

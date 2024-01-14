@@ -1,0 +1,41 @@
+﻿@page "/order-details-create"
+@using ASP_28_12.Application.Catalog.OrderDetails.Request
+@using ASP_View.Services.OrderDetails
+
+@inject ISnackbar _snackbar;
+@inject IOrderDetailsApiClient _orderDetailsApiClient;
+@inject NavigationManager _navigate;
+
+<MudText Color="Color.Primary" Typo="Typo.h4">Tạo đơn chi tiết đơn hàng mới cho đơn đặt hàng</MudText>
+
+<EditForm Model="@orderDetailsCreateRequest" OnValidSubmit="OnValidSubmit">
+    <MudCard>
+        <MudCardContent>
+            <MudTextField Label="Mã đơn hàng" @bind-Value="orderDetailsCreateRequest.OrderID" />
+            <MudTextField Label="Mã sản phẩm" @bind-Value="orderDetailsCreateRequest.ProductID" />
+            <MudTextField Label="Số lượng" @bind-Value="orderDetailsCreateRequest.Quantity" />
+        </MudCardContent>
+        <MudCardActions>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Success" Class="ml-auto">Create</MudButton>
+        </MudCardActions>
+    </MudCard>
+</EditForm>
+
+@code {
+    OrderDetailsCreateRequest orderDetailsCreateRequest = new();
+
+    private async Task OnValidSubmit(EditContext context)
+    {
+        orderDetailsCreateRequest.OrderDetailsID = Guid.NewGuid();
+        var result = await _orderDetailsApiClient.CreateOrderDetails(orderDetailsCreateRequest);
+        if (result)
+        {
+            _snackbar.Add("Thêm thành công", Severity.Success);
+            _navigate.NavigateTo($"/order/details/{orderDetailsCreateRequest.OrderID}");
+        }
+        else
+            _snackbar.Add("Thêm thất bại", Severity.Error);
+        StateHasChanged();
+    }
+
+}

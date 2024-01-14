@@ -1,0 +1,56 @@
+﻿@page "/order-create"
+@using ASP_28_12.Application.Catalog.Order.Request
+@using ASP_28_12.Domains.Enums
+@using ASP_View.Services.Order
+@inject ISnackbar _snackbar;
+@inject IOrderApiClient _orderApiClient;
+@inject NavigationManager _navigate;
+
+<MudText Color="Color.Primary" Typo="Typo.h4">Tạo đơn đặt hàng mới</MudText>
+
+<EditForm Model="@orderCreateRequest" OnValidSubmit="OnValidSubmit">
+    <MudCard>
+        <MudCardContent>
+            <MudTextField Label="ID người dùng" @bind-Value="orderCreateRequest.UserID" />
+            <MudTextField Label="Ngày đặt hàng" @bind-Value="orderCreateRequest.OrderDate" />
+            <MudTextField Label="Tổng chi phí" @bind-Value="orderCreateRequest.TotalFee" />
+            <MudSelect T="Status" Label="Status" Variant="Variant.Outlined" @bind-Value="orderCreateRequest.Status" AnchorOrigin="Origin.BottomCenter">
+                @foreach (Status status in Enum.GetValues(typeof(Status)))
+                {
+                    <MudSelectItem T="Status" Value="status">@status.ToString()</MudSelectItem>
+                }
+            </MudSelect>
+           
+        </MudCardContent>
+        <MudCardActions>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Success" Class="ml-auto">Create</MudButton>
+        </MudCardActions>
+    </MudCard>
+</EditForm>
+
+@code {
+    OrderCreateRequest orderCreateRequest = new();
+    protected override async Task OnInitializedAsync()
+    {
+        orderCreateRequest.UserID = Guid.NewGuid();
+        orderCreateRequest.Status = Status.Success;
+        orderCreateRequest.TotalFee = 0;
+        orderCreateRequest.OrderDate =DateTime.Now;
+
+    }
+
+    private async Task OnValidSubmit(EditContext context)
+    {
+        orderCreateRequest.ID = Guid.NewGuid();
+        var result = await _orderApiClient.CreateOrder(orderCreateRequest);
+        if (result)
+        {
+            _snackbar.Add("Thêm thành công", Severity.Success);
+            _navigate.NavigateTo("/order/list");
+        }
+        else
+        _snackbar.Add("Thêm thất bại", Severity.Error);
+        StateHasChanged();
+    }
+
+}

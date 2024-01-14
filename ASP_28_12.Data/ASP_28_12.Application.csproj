@@ -22,11 +22,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Catalog\Role\" />
+    <ProjectReference Include="..\ASP_28_12.Domains\ASP_28_12.Domains.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ASP_28_12.Domains\ASP_28_12.Domains.csproj" />
+    <Folder Include="Catalog\Role\" />
   </ItemGroup>
 
 </Project>

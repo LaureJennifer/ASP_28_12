@@ -16,8 +16,8 @@ namespace ASP_28_12.Domains.Extensions
                 new Product() { ID = Guid.NewGuid(), Name = "Flower 4", Price = 420, CreatedDate = DateTimeOffset.Now, UrlImage = "https://i.pinimg.com/564x/af/8c/a5/af8ca581043ca4c3a25252344a5a7b34.jpg" }
                 );
             modelBuilder.Entity<User>().HasData(
-                new User() { Id = Guid.NewGuid(), UserName = "User 1", Address = "Tuyên Quang", PhoneNumber = "0349485127", CreatedDate = DateTimeOffset.Now, UrlImage = "https://i.pinimg.com/564x/af/8c/a5/af8ca581043ca4c3a25252344a5a7b34.jpg" },
-                new User() { Id = Guid.NewGuid(), UserName = "User 2", Address = "Tuyên Quang", PhoneNumber = "0349485127", CreatedDate = DateTimeOffset.Now, UrlImage = "https://i.pinimg.com/564x/af/8c/a5/af8ca581043ca4c3a25252344a5a7b34.jpg" },
+                new User() { Id = Guid.NewGuid(), UserName = "User 1", Address = "Tuyên Quang", NormalizedUserName="admin1",NormalizedEmail="admin1@gmail.com",SecurityStamp=Guid.NewGuid().ToString(),PhoneNumber = "0349485127", CreatedDate = DateTimeOffset.Now, UrlImage = "https://i.pinimg.com/564x/af/8c/a5/af8ca581043ca4c3a25252344a5a7b34.jpg" },
+                new User() { Id = Guid.NewGuid(), UserName = "User 2", Address = "Tuyên Quang", NormalizedUserName = "admin2", NormalizedEmail = "admin2@gmail.com", SecurityStamp = Guid.NewGuid().ToString(), PhoneNumber = "0349485127", CreatedDate = DateTimeOffset.Now, UrlImage = "https://i.pinimg.com/564x/af/8c/a5/af8ca581043ca4c3a25252344a5a7b34.jpg" },
                 new User() { Id = Guid.NewGuid(), UserName = "User 3", Address = "Tuyên Quang", PhoneNumber = "0349485127", CreatedDate = DateTimeOffset.Now, UrlImage = "https://i.pinimg.com/564x/af/8c/a5/af8ca581043ca4c3a25252344a5a7b34.jpg" },
                 new User() { Id = Guid.NewGuid(), UserName = "User 4", Address = "Tuyên Quang", PhoneNumber = "0349485127", CreatedDate = DateTimeOffset.Now, UrlImage = "https://i.pinimg.com/564x/af/8c/a5/af8ca581043ca4c3a25252344a5a7b34.jpg" }
                 );

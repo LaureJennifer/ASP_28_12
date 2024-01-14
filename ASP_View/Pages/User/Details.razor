@@ -1,0 +1,63 @@
+﻿@page "/user/details/{userId}"
+
+@using ASP_28_12.Application.Catalog.User
+@using ASP_View.Services.User
+@inject IUserApiClient _userApiClient;
+
+<MudText Color="Color.Primary" Typo="Typo.h4">Thông tin chi tiết của người dùng</MudText>
+
+@if (_userDetailsDto == null)
+{
+    <MudProgressCircular Color="Color.Warning" Indeterminate="true"></MudProgressCircular>
+}
+else
+{
+    <MudGrid>
+        <MudItem xs="6" md="6">
+            <MudSimpleTable>
+                <MudTr>
+                    <MudTd>Mã người dùng</MudTd>
+                    <MudTd>@_userDetailsDto.Id</MudTd>
+                    </MudTr>
+                    <MudTr>
+                        <MudTd>Hình ảnh</MudTd>
+                        <MudTd><MudImage Width="200" Src=@_userDetailsDto.UrlImage Class="rounded-lg" /></MudTd>
+                    </MudTr>
+                    <MudTr>
+                        <MudTd>Tên người dùng</MudTd>
+                        <MudTd>@_userDetailsDto.UserName</MudTd>
+                    </MudTr>
+                    <MudTr>
+                        <MudTd>Ngày tạo</MudTd>
+                        <MudTd>@_userDetailsDto.CreatedDate.ToString("hh:mm tt dd/MM/yyyy")</MudTd>
+                    </MudTr>
+
+                    <MudTr>
+                        <MudTd>Email</MudTd>
+                        <MudTd>@_userDetailsDto.Email</MudTd>
+                    </MudTr>
+                    <MudTr>
+                        <MudTd>Địa chỉ</MudTd>
+                        <MudTd>@_userDetailsDto.Address</MudTd>
+                    </MudTr>
+                    <MudTr>
+                        <MudTd>Số điện thoại</MudTd>
+                        <MudTd>@_userDetailsDto.PhoneNumber</MudTd>
+                    </MudTr>
+
+                </MudSimpleTable>
+
+            </MudItem>
+        </MudGrid>
+}
+
+@code {
+    [Parameter] public string userId { get; set; }
+
+     UserDto _userDetailsDto { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _userDetailsDto = await _userApiClient.GetUserDetails(userId);
+    }
+}

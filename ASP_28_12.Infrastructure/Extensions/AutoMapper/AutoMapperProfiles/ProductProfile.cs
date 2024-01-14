@@ -1,5 +1,5 @@
-﻿using ASP_28_12.Application.Catalog.ProductApp;
-using ASP_28_12.Application.Catalog.ProductApp.Request;
+﻿using ASP_28_12.Application.Catalog.Product;
+using ASP_28_12.Application.Catalog.Product.Request;
 using ASP_28_12.Domains.Entities;
 using AutoMapper;
 

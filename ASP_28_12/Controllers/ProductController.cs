@@ -1,15 +1,17 @@
-﻿using ASP_28_12.Application.Catalog.ProductApp.Request;
+﻿using ASP_28_12.Application.Catalog.Product.Request;
 using ASP_28_12.Application.ViewModels.Pagination;
 using ASP_28_12.Domains.Entities;
 using ASP_28_12.Repositories;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ProductDto = ASP_28_12.Application.Catalog.ProductApp.ProductDto;
+using ProductDto = ASP_28_12.Application.Catalog.Product.ProductDto;
 
 namespace ASP_28_12.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ProductController : ControllerBase
     {
         private readonly IProductRepository _productRepository;
