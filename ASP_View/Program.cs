@@ -1,9 +1,12 @@
 using ASP_28_12.Domains.EF;
 using ASP_View.Data;
-using ASP_View.Services.OrderDetailsSer;
-using ASP_View.Services.OrderSer;
-using ASP_View.Services.ProductSer;
-using ASP_View.Services.UserSer;
+using ASP_View.Services.Login;
+using ASP_View.Services.Order;
+using ASP_View.Services.OrderDetails;
+using ASP_View.Services.Product;
+using ASP_View.Services.User;
+using Blazored.LocalStorage;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.EntityFrameworkCore;
 using MudBlazor.Services;
 
@@ -19,7 +22,13 @@ namespace ASP_View
             builder.Services.AddRazorPages();
             builder.Services.AddServerSideBlazor();
             builder.Services.AddSingleton<WeatherForecastService>();
+            builder.Services.AddBlazoredLocalStorage();
+            builder.Services.AddAuthorizationCore();
+            builder.Services.AddAuthorizationCore();
+            builder.Services.AddScoped<AuthenticationStateProvider, ApiAuthenticationStateProvider>();
+            builder.Services.AddScoped<IAuthApiClient, AuthApiClient>();
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7066") });
+
             builder.Services.AddTransient<IProductApiClient, ProductApiClient>();
             builder.Services.AddTransient<IUserApiClient, UserApiClient>();
             builder.Services.AddTransient<IOrderApiClient, OrderApiClient>();
@@ -30,6 +39,7 @@ namespace ASP_View
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionString"));
             });
+           
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -45,7 +55,7 @@ namespace ASP_View
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.MapBlazorHub();
             app.MapFallbackToPage("/_Host");
 

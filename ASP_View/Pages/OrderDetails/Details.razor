@@ -1,0 +1,56 @@
+﻿@page "/order-details/details/{orderDetailsId}"
+@using ASP_28_12.Application.Catalog.OrderDetails
+@using ASP_View.Services.OrderDetails
+
+@inject IOrderDetailsApiClient _orderDetailsApiClient;
+
+<MudText Color="Color.Primary" Typo="Typo.h4" Class="mb-5">Thông tin chi tiết của chi tiết đơn hàng</MudText>
+
+@if (_orderDetailsForOrderDto == null)
+{
+    <MudProgressCircular Color="Color.Warning" Indeterminate="true"></MudProgressCircular>
+}
+else
+{
+    <MudGrid>
+        <MudItem xs="6" md="6">
+            <MudSimpleTable>            
+                    <MudTr>
+                        <MudTd>Mã chi tiết đơn hàng</MudTd>
+                        <MudTd>@_orderDetailsForOrderDto.OrderDetailsID</MudTd>
+                    </MudTr>
+                    <MudTr>
+                        <MudTd>Mã sản phẩm</MudTd>
+                        <MudTd>@_orderDetailsForOrderDto.ProductID</MudTd>
+                    </MudTr>
+                    <MudTr>
+                        <MudTd>Tên sản phẩm</MudTd>
+                        <MudTd>@_orderDetailsForOrderDto.ProductName</MudTd>
+                    </MudTr>
+                    <MudTr>
+                        <MudTd>Đơn giá</MudTd>
+                        <MudTd>@_orderDetailsForOrderDto.Price</MudTd>
+                    </MudTr>
+                    <MudTr>
+                        <MudTd>Số lượng</MudTd>
+                        <MudTd>@_orderDetailsForOrderDto.Quantity</MudTd>
+                    </MudTr>
+                    
+                </MudSimpleTable>
+
+            </MudItem>
+        </MudGrid>
+}
+
+@code {
+    [Parameter] public string orderDetailsId { get; set; }
+
+    private OrderDetailsDto _orderDetailsForOrderDto { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _orderDetailsForOrderDto = await _orderDetailsApiClient.GetDetails(orderDetailsId);
+    }
+
+}
+

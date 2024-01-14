@@ -1,5 +1,5 @@
-﻿using ASP_28_12.Application.Catalog.OrderApp;
-using ASP_28_12.Application.Catalog.OrderApp.Request;
+﻿using ASP_28_12.Application.Catalog.Order;
+using ASP_28_12.Application.Catalog.Order.Request;
 using ASP_28_12.Domains.Entities;
 using AutoMapper;
 

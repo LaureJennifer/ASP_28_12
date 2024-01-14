@@ -1,0 +1,58 @@
+﻿@page "/user-update/{userId}"
+@using ASP_28_12.Application.Catalog.User.Request
+@using ASP_28_12.Domains.Entities
+@using ASP_View.Services.User
+
+@inject ISnackbar _snackbar;
+@inject IUserApiClient _userApiClient;
+@inject NavigationManager _navigate;
+
+<MudText Color="Color.Primary" Typo="Typo.h4">Cập nhật thông tin người dùng</MudText>
+
+    <EditForm Model="userUpdateRequest" OnValidSubmit="OnSubmit">
+        <MudCard>
+            <MudCardContent>
+                <MudTextField Label="Tên người dùng" @bind-Value="userUpdateRequest.UserName" />
+                <MudTextField Label="Email" @bind-Value="userUpdateRequest.Email" />
+                <MudTextField Label="Địa chỉ" @bind-Value="userUpdateRequest.Address" />
+                <MudTextField Label="Số điện thoại" @bind-Value="userUpdateRequest.PhoneNumber" />
+           
+
+        </MudCardContent>
+        <MudCardActions>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Success" Class="ml-auto">Update</MudButton>
+        </MudCardActions>
+    </MudCard>
+
+</EditForm>
+
+@code {
+    [Parameter]
+    public string userId { set; get; }
+
+    UserUpdateRequest userUpdateRequest = new();
+    string linkImg = "";
+    protected override async Task OnInitializedAsync()
+    {
+        var userDto = await _userApiClient.GetUserDetails(userId);
+       
+        userUpdateRequest.UserName = userDto.UserName;
+        userUpdateRequest.Address = userDto.Address;
+        userUpdateRequest.PhoneNumber = userDto.PhoneNumber;
+        userUpdateRequest.Email = userDto.Email;
+        userUpdateRequest.UrlImage = userDto.UrlImage;
+
+    }
+
+    private async Task OnSubmit()
+    {
+        var result = await _userApiClient.UpdateUser(Guid.Parse(userId), userUpdateRequest);
+
+        if (result)
+        {
+            _snackbar.Add("Cập nhật thành công", Severity.Success);
+            _navigate.NavigateTo("/users");
+        }
+        StateHasChanged();
+    }
+}

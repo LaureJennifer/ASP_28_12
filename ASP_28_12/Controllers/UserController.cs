@@ -1,15 +1,17 @@
-﻿using ASP_28_12.Application.Catalog.UserApp;
-using ASP_28_12.Application.Catalog.UserApp.Request;
+﻿using ASP_28_12.Application.Catalog.User;
+using ASP_28_12.Application.Catalog.User.Request;
 using ASP_28_12.Application.ViewModels.Pagination;
 using ASP_28_12.Domains.Entities;
 using ASP_28_12.Repositories;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ASP_28_12.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly IUserRepository _userRepository;

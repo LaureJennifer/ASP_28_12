@@ -1,0 +1,14 @@
+﻿@page "/logout"
+@using ASP_View.Services.Login
+
+
+@inject IAuthApiClient _auApiClient
+@inject NavigationManager _navigate
+
+@code {
+    protected async override Task OnInitializedAsync()
+    {
+        await _auApiClient.Logout();
+        _navigate.NavigateTo("/");
+    }
+}

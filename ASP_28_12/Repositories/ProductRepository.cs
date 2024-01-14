@@ -1,4 +1,4 @@
-﻿using ASP_28_12.Application.Catalog.ProductApp.Request;
+﻿using ASP_28_12.Application.Catalog.Product.Request;
 using ASP_28_12.Application.ViewModels.Pagination;
 using ASP_28_12.Domains.EF;
 using ASP_28_12.Domains.Entities;

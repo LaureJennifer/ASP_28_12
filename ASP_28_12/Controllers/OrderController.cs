@@ -1,16 +1,18 @@
 ﻿
-using ASP_28_12.Application.Catalog.OrderApp;
-using ASP_28_12.Application.Catalog.OrderApp.Request;
+using ASP_28_12.Application.Catalog.Order;
+using ASP_28_12.Application.Catalog.Order.Request;
 using ASP_28_12.Application.ViewModels.Pagination;
 using ASP_28_12.Domains.Entities;
 using ASP_28_12.Repositories;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ASP_28_12.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class OrderController : ControllerBase
     {
         private readonly IOrderRepository _orderRepository;

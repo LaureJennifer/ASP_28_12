@@ -1,0 +1,63 @@
+﻿@page "/user-create"
+@using ASP_28_12.Application.Catalog
+@using ASP_28_12.Application.Catalog.User.Request
+@using ASP_View.Services.User
+
+@inject ISnackbar _snackbar;
+@inject IUserApiClient _userApiClient;
+@inject NavigationManager _navigate;
+
+<MudText Color="Color.Primary" Typo="Typo.h4">Tạo người dùng mới</MudText>
+
+<EditForm Model="@userCreateRequest" OnValidSubmit="OnValidSubmit">
+    <MudCard>
+        <MudCardContent>
+            <MudTextField Label="Tên người dùng" @bind-Value="userCreateRequest.UserName" />
+            
+            <MudTextField Label="Email" @bind-Value="userCreateRequest.Email" />
+            <MudTextField Label="Địa chỉ" @bind-Value="userCreateRequest.Address" />
+            <MudTextField Label="Số điện thoại" @bind-Value="userCreateRequest.PhoneNumber" />
+            <MudGrid>
+                <MudItem xs="12" md="12" sm="12">
+                    <InputFile OnChange="HandleFileSelect" accept=".jpg,.jpeg,.png" />
+                </MudItem>
+                <MudItem xs="12" md="6" sm="6">
+                    @if (selectedImage != null)
+                    {
+                        <MudImage Width="600" Height="300" Src="@imageUrl" Alt="" Elevation="25" Class="rounded-lg" />
+                    }
+                </MudItem>
+            </MudGrid>
+        </MudCardContent>
+        <MudCardActions>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Success" Class="ml-auto">Create</MudButton>
+        </MudCardActions>
+    </MudCard>
+</EditForm>
+
+@code {
+    UserCreateRequest userCreateRequest = new();
+    ImageHandle imageHandle = new();
+    private IBrowserFile? selectedImage;
+    string? imageUrl = "";
+      
+    private async Task OnValidSubmit(EditContext context)
+    {
+        userCreateRequest.ID = Guid.NewGuid();
+        userCreateRequest.UrlImage = imageUrl;
+        var result = await _userApiClient.CreateUser(userCreateRequest);
+        if (result)
+        {
+            _snackbar.Add("thêm thành công", Severity.Success);
+            _navigate.NavigateTo("/users");
+        }
+        StateHasChanged();
+    }
+
+    private async Task HandleFileSelect(InputFileChangeEventArgs e)
+    {
+        selectedImage = e.File;
+        imageUrl = @"\image\User\" + await imageHandle.AddImage(selectedImage, "User");
+
+    }
+}

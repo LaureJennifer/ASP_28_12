@@ -1,0 +1,58 @@
+﻿@page "/product/details/{productId}"
+
+@using ASP_28_12.Application.Catalog.Product
+@using ASP_28_12.Domains.Entities
+@using ASP_View.Services.Product
+
+@inject IProductApiClient _productApiClient;
+
+<MudText Color="Color.Primary" Typo="Typo.h4">Thông tin chi tiết của sản phẩm</MudText>
+
+@if (_productDetailsDto == null)
+{
+    <MudProgressCircular Color="Color.Warning" Indeterminate="true"></MudProgressCircular>
+}
+else
+{
+    <MudGrid>
+        <MudItem xs="6" md="6">
+            <MudSimpleTable>
+                <MudTr>
+                    <MudTd>Mã sản phẩm</MudTd>
+                    <MudTd>@_productDetailsDto.ID</MudTd>
+                    </MudTr>
+                    <MudTr>
+                        <MudTd>Hình ảnh</MudTd>
+                        <MudTd><MudImage Width="200" Src=@_productDetailsDto.UrlImage Class="rounded-lg" /></MudTd>
+                    </MudTr>
+                    <MudTr>
+                        <MudTd>Tên sản phẩm</MudTd>
+                        <MudTd>@_productDetailsDto.Name</MudTd>
+                    </MudTr>
+                    <MudTr>
+                        <MudTd>Ngày tạo</MudTd>
+                        <MudTd>@_productDetailsDto.CreatedDate.ToString("hh:mm tt dd/MM/yyyy")</MudTd>
+                    </MudTr>
+
+                    <MudTr>
+                        <MudTd>Đơn giá</MudTd>
+                        <MudTd>@_productDetailsDto.Price</MudTd>
+                    </MudTr>
+
+
+                </MudSimpleTable>
+                
+            </MudItem>
+    </MudGrid>
+    }
+
+@code {
+    [Parameter] public string productId { get; set; }
+    
+    ProductDto _productDetailsDto { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _productDetailsDto = await _productApiClient.GetProductDetails(productId);
+    }
+}

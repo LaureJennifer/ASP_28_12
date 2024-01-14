@@ -1,12 +1,17 @@
 using ASP_28_12.Domains.EF;
+using ASP_28_12.Domains.Entities;
 using ASP_28_12.Infrastructure.Extensions.AutoMapper;
 using ASP_28_12.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using System.Text;
 namespace ASP_28_12
 {
     public class Program
     {
-        public IConfiguration Configuration { get; set; }
+        public IConfiguration Configuration { get; }
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
@@ -22,7 +27,22 @@ namespace ASP_28_12
                 options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionString"));
             });
             builder.Services.AddApplication();
-
+            builder.Services.AddIdentity<User, Role>().AddEntityFrameworkStores<FlowerDbContext>();
+            
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = builder.Configuration["JwtIssuer"],
+                        ValidAudience = builder.Configuration["JwtAudience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSecurityKey"]))
+                    };
+                });
             builder.Services.AddTransient<IProductRepository, ProductRepository>();
             builder.Services.AddTransient<IUserRepository, UserRepository>();
             builder.Services.AddTransient<IOrderRepository, OrderRepository>();
@@ -38,6 +58,8 @@ namespace ASP_28_12
             }
 
             app.UseHttpsRedirection();
+            app.UseRouting();
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

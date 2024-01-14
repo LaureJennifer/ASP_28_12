@@ -1,8 +1,10 @@
-﻿using ASP_28_12.Application.Catalog.OrderApp.Request;
+﻿using ASP_28_12.Application.Catalog.Order.Request;
 using ASP_28_12.Application.ViewModels.Pagination;
 using ASP_28_12.Domains.EF;
 using ASP_28_12.Domains.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
+using ASP_28_12.Domains.Extensions;
 
 namespace ASP_28_12.Repositories
 {
@@ -29,8 +31,9 @@ namespace ASP_28_12.Repositories
             return order;
         }
 
-        public async Task<PagedList<Order>> GetAllPaging(OrderPagingRequest orderPagingRequest)
+        public async Task<PagedList<Order>> GetAllPaging( OrderPagingRequest orderPagingRequest)
         {
+            
             var query = _db.Orders.Include(x => x.OrderDetails).Include(y => y.User).AsQueryable();
 
             if (orderPagingRequest.UserID != null)
