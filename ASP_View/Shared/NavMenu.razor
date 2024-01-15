@@ -1,4 +1,6 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@attribute [Authorize(Roles = "admin")]
+
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">ASP_View</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
@@ -14,7 +16,7 @@
                 <span class="oi oi-home" aria-hidden="true"></span> Home
             </NavLink>
         </div>
-        <AuthorizeView>
+        <AuthorizeView Roles="admin">
             <Authorized>
                 <div class="nav-item px-3">
                     <NavLink class="nav-link" href="products">
@@ -32,15 +34,22 @@
                     </NavLink>
                 </div>
             </Authorized>
-           <NotAuthorized>
+          @*  <NotAuthorized>
                 <div class="nav-item px-3">
                     <NavLink class="nav-link" href="users">
                         <span class="oi oi-list-rich" aria-hidden="true"></span> User List
                     </NavLink>
                 </div>
-           </NotAuthorized>
+           </NotAuthorized> *@
+       
+            @*  <NotAuthorized>
+            <div class="nav-item px-3">
+            <NavLink class="nav-link" href="users">
+            <span class="oi oi-list-rich" aria-hidden="true"></span> User List
+            </NavLink>
+            </div>
+            </NotAuthorized> *@
         </AuthorizeView>
-        
         
     </nav>
 </div>

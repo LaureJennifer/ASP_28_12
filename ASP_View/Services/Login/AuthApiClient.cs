@@ -34,7 +34,8 @@ namespace ASP_View.Services.Login
                 return loginResponse;
             }
             await _localStorage.SetItemAsync("authToken", loginResponse.Token);
-            ((ApiAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsAuthenticated(loginRequest.UserName);
+            await _authenticationStateProvider.GetAuthenticationStateAsync();
+            //((ApiAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsAuthenticated(loginRequest.UserName);
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer",loginResponse.Token);
             return loginResponse;
         }

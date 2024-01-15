@@ -34,9 +34,10 @@
     {
 
         var result = await _authApiClient.Login(_loginRequest);
+        
         if (result.Successful)
         {
-            _navigate.NavigateTo("/products");
+            _navigate.NavigateTo("/");
         }
         else
         {
