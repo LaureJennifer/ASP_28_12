@@ -20,24 +20,53 @@ namespace ASP_View.Data
         {
             try
             {
-                var savedToken = await _localStorage.GetItemAsync<string>("authToken");
+                string token = await _localStorage.GetItemAsync<string>("authToken");
+                var identity = new ClaimsIdentity();
+                _httpClient.DefaultRequestHeaders.Authorization = null;
 
-                if (string.IsNullOrWhiteSpace(savedToken))
+                if (!string.IsNullOrEmpty(token))
                 {
-                    return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
+                    identity = new ClaimsIdentity(ParseClaimsFromJwt(token), "jwt");
+                    _httpClient.DefaultRequestHeaders.Authorization =
+                        new AuthenticationHeaderValue("Bearer", token.Replace("\"", ""));
                 }
 
-                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", savedToken);
+                var user = new ClaimsPrincipal(identity);
+                var state = new AuthenticationState(user);
 
-                return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(ParseClaimsFromJwt(savedToken), "jwt")));
+                NotifyAuthenticationStateChanged(Task.FromResult(state));
+
+                return state;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error retrieving authentication state: {ex.Message}");
-                return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
-
+                  return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
             }
+
         }
+        //public override async Task<AuthenticationState> GetAuthenticationStateAsync()
+        //{
+        //    try
+        //    {
+        //        var savedToken = await _localStorage.GetItemAsync<string>("authToken");
+
+        //        if (string.IsNullOrWhiteSpace(savedToken))
+        //        {
+        //            return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
+        //        }
+
+        //        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", savedToken);
+
+        //        return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(ParseClaimsFromJwt(savedToken), "jwt")));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine($"Error retrieving authentication state: {ex.Message}");
+        //        return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
+
+        //    }
+        //}
         public void MarkUserAsAuthenticated(string userName)
         {
             var authenticatedUser = new ClaimsPrincipal(new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, userName) }, "apiauth"));

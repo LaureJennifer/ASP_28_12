@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -20,15 +21,17 @@ namespace ASP_28_12.Controllers
         private readonly IConfiguration _configuration;
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
-        private readonly IUserRepository _userRepository; 
+        private readonly IUserRepository _userRepository;
+        private readonly RoleManager<Role> _roleManager;
 
-        public LoginController(IConfiguration configuration,UserManager<User> userManager,SignInManager<User> signInManager, IUserRepository userRepository)
+        public LoginController(IConfiguration configuration,UserManager<User> userManager,SignInManager<User> signInManager, RoleManager<Role> roleManager, IUserRepository userRepository)
         {
             _configuration = configuration;
             _signInManager = signInManager;
             _userManager = userManager;
             _userRepository = userRepository;
-        }
+            _roleManager = roleManager;
+    }
         [HttpPost("authenticate")]
         [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginRequest login)
@@ -39,11 +42,12 @@ namespace ASP_28_12.Controllers
             var result = await _signInManager.PasswordSignInAsync(login.UserName, login.Password, false, false);
 
             if (!result.Succeeded) return BadRequest(new LoginResponse { Successful = false, Error = "Username and password are invalid." });
-
+            var roles = await _userManager.GetRolesAsync(user);
             var claims = new[]
             {
                 new Claim(ClaimTypes.Name, login.UserName),
-                new Claim("UserId", user.Id.ToString())
+                new Claim("UserId", user.Id.ToString()),
+                 new Claim(ClaimTypes.Role,string.Join(";",roles))
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSecurityKey"]));
