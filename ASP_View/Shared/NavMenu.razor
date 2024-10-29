@@ -1,4 +1,4 @@
-﻿@attribute [Authorize(Roles = "admin")]
+﻿
 
 <div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
@@ -20,37 +20,40 @@
             <Authorized>
                 <div class="nav-item px-3">
                     <NavLink class="nav-link" href="products">
-                        <span class="oi oi-list-rich" aria-hidden="true"></span> Product List
+                        <span class="oi oi-list-rich" aria-hidden="true"></span> Quản lí sản phẩm
                     </NavLink>
                 </div>
                 <div class="nav-item px-3">
                     <NavLink class="nav-link" href="users">
-                        <span class="oi oi-list-rich" aria-hidden="true"></span> User List
+                        <span class="oi oi-list-rich" aria-hidden="true"></span> Quản lí người dùng
                     </NavLink>
                 </div>
                 <div class="nav-item px-3">
                     <NavLink class="nav-link" href="/order/list">
-                        <span class="oi oi-list-rich" aria-hidden="true"></span> Order List
+                        <span class="oi oi-list-rich" aria-hidden="true"></span> Quản lí đơn hàng
                     </NavLink>
                 </div>
             </Authorized>
-          @*  <NotAuthorized>
+        </AuthorizeView>
+        <AuthorizeView Roles="customer">
+            <Authorized>
                 <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="users">
-                        <span class="oi oi-list-rich" aria-hidden="true"></span> User List
+                    <NavLink class="nav-link" href="/customer-home">
+                        <span class="oi oi-list-rich" aria-hidden="true"></span> Danh sách sản phẩm
                     </NavLink>
                 </div>
-           </NotAuthorized> *@
-       
-            @*  <NotAuthorized>
-            <div class="nav-item px-3">
-            <NavLink class="nav-link" href="users">
-            <span class="oi oi-list-rich" aria-hidden="true"></span> User List
-            </NavLink>
-            </div>
-            </NotAuthorized> *@
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="customer-home">
+                        <span class="oi oi-list-rich" aria-hidden="true"></span> Thông tin cá nhân
+                    </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="/cart">
+                        <span class="oi oi-list-rich" aria-hidden="true"></span> Giỏ hàng 
+                    </NavLink>
+                </div>
+            </Authorized>
         </AuthorizeView>
-        
     </nav>
 </div>
 

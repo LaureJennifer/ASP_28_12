@@ -16,5 +16,6 @@ namespace ASP_28_12.Application.Register
         public string Address { get; set; }
         public string UrlImage { get; set; }
         public string ConfirmPassword { get; set; }
+        public string RoleName { get; set; }
     }
 }
