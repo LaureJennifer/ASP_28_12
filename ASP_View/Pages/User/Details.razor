@@ -3,7 +3,7 @@
 @using ASP_28_12.Application.Catalog.User
 @using ASP_View.Services.User
 @inject IUserApiClient _userApiClient;
-
+@inject HttpClient _httpClient;
 <MudText Color="Color.Primary" Typo="Typo.h4">Thông tin chi tiết của người dùng</MudText>
 
 @if (_userDetailsDto == null)
@@ -58,6 +58,9 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        _userDetailsDto = await _userApiClient.GetUserDetails(userId);
+        var result = await _httpClient.GetFromJsonAsync<UserDto>($"/api/user/{userId}");
+        _userDetailsDto= result;
+
+        // _userDetailsDto = await _userApiClient.GetUserDetails(userId);
     }
 }

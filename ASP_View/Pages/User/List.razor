@@ -3,8 +3,9 @@
 @using ASP_28_12.Application.Catalog.User.Request
 @using ASP_28_12.Application.ViewModels.Pagination
 @using ASP_View.Services.User
+@using Microsoft.AspNetCore.WebUtilities
 
-
+@inject HttpClient _httpClient;
 @inject ISnackbar _snackbar;
 
 <MudText Typo="Typo.h4" Color="Color.Primary" Class="mb-3">Thông tin người dùng</MudText>
@@ -14,40 +15,45 @@
 }
 else
 {
-    <EditForm Model="@userPagingRequest" class="mb-5">
+    <EditForm Model="@userPagingRequest" Class="mb-5">
         <MudGrid>
             <MudItem xs="8" md="8">
 
-                <MudInput Placeholder="Tên người dùng" class="form-control" @bind-Value="userPagingRequest.UserName"></MudInput>
+                <MudInput Placeholder="Tên người dùng" Class="form-control" @bind-Value="userPagingRequest.UserName"></MudInput>
             </MudItem>
             <MudItem xs="2" md="2">
-                <MudButton OnClick="()=>SearchByTextFilled()" class="mt-1" Color="Color.Primary" Variant="Variant.Filled">Search</MudButton>
+                <MudButton OnClick="()=>SearchByTextFilled()" Class="mt-1" Color="Color.Primary" Variant="Variant.Filled">Search</MudButton>
             </MudItem>
-            <MudItem xs="2" md="2" C>
-                <MudButton Color="Color.Primary" Variant="Variant.Filled" class="mt-1" OnClick="()=>NavigateToUserCreate()">Thêm mới</MudButton>
+            <MudItem xs="2" md="2">
+                <MudButton Color="Color.Primary" Variant="Variant.Filled" Class="mt-1" OnClick="()=>NavigateToUserCreate()">Thêm mới</MudButton>
             </MudItem>
         </MudGrid>
 
     </EditForm>
-
+    @if (isLoading)
+    {
+        <p>Loading...</p>
+    }
+    else
+    {
     <MudTable Items="@_lstUser" Hover="true" Striped="true" FixedHeader="true">
         <HeaderContent>
             <MudTh>STT</MudTh>
             <MudTh>Tên</MudTh>
-            <MudTh class="text-center">Hình ảnh</MudTh>
-            <MudTh class="text-center">Ngày tạo</MudTh>
-            <MudTh class="text-center">Email</MudTh>
-            <MudTh class="text-center">Địa chỉ</MudTh>
-            <MudTh class="text-center">Số điện thoại</MudTh>
+                <MudTh Class="text-center">Hình ảnh</MudTh>
+                <MudTh Class="text-center">Ngày tạo</MudTh>
+            <MudTh Class="text-center">Email</MudTh>
+                <MudTh Class="text-center">Địa chỉ</MudTh>
+                <MudTh Class="text-center">Số điện thoại</MudTh>
 
 
-            <MudTh class="text-center">Hành động</MudTh>
+                <MudTh Class="text-center">Hành động</MudTh>
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="">@(_lstUser.IndexOf(context) + 1)</MudTd>
             <MudTd DataLabel="">@context.UserName</MudTd>
                 <MudTd DataLabel="" Class="text-center"><MudImage Width="80" Height="50" Src=@context.UrlImage Class="rounded-lg" /></MudTd>
-                <MudTd DataLabel="" class="text-center">@context.CreatedDate.ToString("hh:mm tt dd/MM/yyyy")</MudTd>
+                <MudTd DataLabel="" Class="text-center">@context.CreatedDate.ToString("hh:mm tt dd/MM/yyyy")</MudTd>
                 <MudTd DataLabel="" Class="text-center">@context.Email</MudTd>
                 <MudTd DataLabel="" Class="text-center">@context.Address</MudTd>
                 <MudTd DataLabel="" Class="text-center">@context.PhoneNumber</MudTd>
@@ -81,7 +87,7 @@ else
                 </MudGrid>
             </PagerContent>
         </MudTable>
-
+    }
     <MudMessageBox @ref="_mboxDelete" Title="Xác nhận" CancelText="Hủy">
         <MessageContent>
             Xác nhận xóa sản phẩm khỏi danh sách!
@@ -96,18 +102,18 @@ else
 
 @code {
     [Inject] IUserApiClient _userApiClient { set; get; }
-    [Inject] NavigationManager _navigationManager { get; set; }
-
+    [Inject] NavigationManager _navigationManager { get; set; } 
     UserDto userDelete { get; set; } = new();
     PagedList<UserDto> pagingRespone { get; set; } = new();
     UserPagingRequest userPagingRequest = new();
     MudMessageBox _mboxDelete { get; set; } = null!;
     public MetaData metadata = new();
-    List<UserDto> _lstUser;
-
+    List<UserDto> _lstUser = new List<UserDto>();
+    private bool isLoading = true;
     protected override async Task OnInitializedAsync()
     {
         await GetUserList();
+        isLoading = false;
     }
 
     void NavigateToDetails(string userId)
@@ -127,6 +133,7 @@ else
 
     private async Task SearchByTextFilled()
     {
+
         await GetUserList();
     }
 
@@ -140,19 +147,38 @@ else
     }
     private async Task OnConfirmDelete()
     {
-        await _userApiClient.DeleteUser(userDelete.Id);
+        bool isError = await _userApiClient.DeleteUser(userDelete.Id);
+
         await GetUserList();
-        _snackbar.Add("Xóa thành công", Severity.Success);
+        if (isError)
+        {
+            _snackbar.Add("Xóa thành công", Severity.Success);
+
+        }else
+            _snackbar.Add("Xóa thất bại", Severity.Error);
+
         StateHasChanged();
     }
 
     private async Task GetUserList()
     {
-        pagingRespone = await _userApiClient.GetUser(userPagingRequest);
-        _lstUser = pagingRespone.Items;
-        metadata = pagingRespone.MetaData;
+        var queryStringPara = new Dictionary<string, string>
+            {
+                ["PageNumber"] = userPagingRequest.PageNumber.ToString()
+            };
+        if (!string.IsNullOrEmpty(userPagingRequest.UserName)) queryStringPara.Add("username", userPagingRequest.UserName);
+        string url = QueryHelpers.AddQueryString("/api/User", queryStringPara);
+        var result = await _httpClient.GetFromJsonAsync<PagedList<UserDto>>(url);
+         pagingRespone = await _userApiClient.GetUser(userPagingRequest);
+        if (result != null)
+        {
+            pagingRespone = result;
+            _lstUser = pagingRespone.Items;
+        }
+        // _lstUser = pagingRespone.Items;
+        // metadata = pagingRespone.MetaData;
     }
-
+    
     async Task OnSelectPagination(int pageNumber)
     {
         userPagingRequest.PageNumber = pageNumber;

@@ -21,7 +21,7 @@ namespace ASP_28_12.Domains.Configurations
             builder.HasOne(e => e.User)
                 .WithMany(c => c.Orders)
                 .HasForeignKey(e => e.UserID)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
         }
 
     }

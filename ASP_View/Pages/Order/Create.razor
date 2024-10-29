@@ -1,18 +1,30 @@
 ﻿@page "/order-create"
 @using ASP_28_12.Application.Catalog.Order.Request
+@using ASP_28_12.Application.Catalog.User
+@using ASP_28_12.Application.Catalog.User.Request
+@using ASP_28_12.Application.ViewModels.Pagination
 @using ASP_28_12.Domains.Enums
 @using ASP_View.Services.Order
+@using ASP_View.Services.User
 @inject ISnackbar _snackbar;
 @inject IOrderApiClient _orderApiClient;
+@inject IUserApiClient _userApiClient;
 @inject NavigationManager _navigate;
+@inject NavigationManager _navigationManager;
 
 <MudText Color="Color.Primary" Typo="Typo.h4">Tạo đơn đặt hàng mới</MudText>
 
 <EditForm Model="@orderCreateRequest" OnValidSubmit="OnValidSubmit">
     <MudCard>
         <MudCardContent>
-            <MudTextField Label="ID người dùng" @bind-Value="orderCreateRequest.UserID" />
-            <MudTextField Label="Ngày đặt hàng" @bind-Value="orderCreateRequest.OrderDate" />
+             <MudSelect T="string" Label="Rạp" Value="SelectedUserId" ValueChanged="(str)=>OnSelectedUser(str)">
+                    @foreach (var user in _lstUser)
+                    {
+                    <MudSelectItem T="string" Value="@(user.Id.ToString())">@user.UserName</MudSelectItem>
+                            }
+                        </MudSelect>
+@*             <MudTextField Label="ID người dùng" @bind-Value="orderCreateRequest.UserID" />
+ *@            <MudTextField Label="Ngày đặt hàng" @bind-Value="orderCreateRequest.OrderDate" />
             <MudTextField Label="Tổng chi phí" @bind-Value="orderCreateRequest.TotalFee" />
             <MudSelect T="Status" Label="Status" Variant="Variant.Outlined" @bind-Value="orderCreateRequest.Status" AnchorOrigin="Origin.BottomCenter">
                 @foreach (Status status in Enum.GetValues(typeof(Status)))
@@ -30,17 +42,33 @@
 
 @code {
     OrderCreateRequest orderCreateRequest = new();
+    UserPagingRequest userPagingRequest = new();
+    PagedList<UserDto> pagingRespone { get; set; } = new();
+    MudMessageBox _mboxDelete { get; set; } = null!;
+    public MetaData metadata = new();
+    List<UserDto> _lstUser = new();
+    public string SelectedUserId { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
+        await GetUserList();
         orderCreateRequest.UserID = Guid.NewGuid();
         orderCreateRequest.Status = Status.Success;
         orderCreateRequest.TotalFee = 0;
         orderCreateRequest.OrderDate =DateTime.Now;
 
     }
+    private async Task GetUserList()
+    {
+        pagingRespone = await _userApiClient.GetUser(userPagingRequest);
+        _lstUser = pagingRespone.Items;
+        metadata = pagingRespone.MetaData;
+    }
+
 
     private async Task OnValidSubmit(EditContext context)
     {
+        orderCreateRequest.UserID = Guid.Parse(SelectedUserId);
         orderCreateRequest.ID = Guid.NewGuid();
         var result = await _orderApiClient.CreateOrder(orderCreateRequest);
         if (result)
@@ -51,6 +79,12 @@
         else
         _snackbar.Add("Thêm thất bại", Severity.Error);
         StateHasChanged();
+    }
+    async Task OnSelectedUser(string idUser)
+    {
+        SelectedUserId = idUser;
+        await Task.Delay(100);
+        
     }
 
 }
